@@ -7,34 +7,17 @@ from matplotlib.animation import FuncAnimation
 from matplotlib.widgets import Button, Slider
 
 
-class Animate():
-    def __init__(self, func, xlim, ylim, time, fps=30, res=1000,
-                 pre_calc=False):
-        """
-        Animates a function f: [a,b]x[t0,tf] -> [c,d]
+class Animation:
+    """
+    Provides a base class that controls timing and interactive elements
+    """
 
-        func : callable
-        Takes a numpy array for the x domain and a scalar for the time domain
-
-        xlim : a sequence of floats ex. [a,b] or (a,b)
-        ylim : a sequence of floats ex. [c,d] or (c,d)
-        time : a sequence of floats ex. [t0,tf] or (t0,tf) (represents seconds)
-
-        fps : float, optional
-            indicates how many frames per second to display
-        res : integer, optional
-            indicates the number of subdivisions of xlim
-        pre_calc : bool, optional
-            if true, calculates func for all time before plotting
-            if false, calculates func as needed
-        """
+    def __init__(self, time, fps=30, pre_calc=False):
         self._t_0 = time[0]
         self._t_f = time[1]
         self._dt = 1/fps
         self._t_i = self._t_0
 
-        self.func = func
-        self.x = np.linspace(xlim[0], xlim[1], res)
         self.t = np.linspace(time[0], time[1], (time[1]-time[0])*fps)
 
         self._pre_calc = pre_calc
@@ -43,28 +26,9 @@ class Animate():
         self._len = len(self.t)
 
         self.fig = plt.gcf()
-        self.ax = plt.axes(xlim=xlim, ylim=ylim)
-        self.line, = self.ax.plot(self.x, func(self.x, time[0]))
-
-        if pre_calc:
-            self.data = []
-            self._i = 0
-            for t in self.t:
-                self.data.append(func(self.x, t))
 
         def animate(i):
-            if self._has_slider:
-                self.slider.set_val(self._t_i)
-            if pre_calc:
-                self.line.set_data(self.x, self.data[self._i])
-                self._i = (self._i + 1) % self._len
-                self._t_i = self.t[self._i]
-            else:
-                self.line.set_data(self.x, func(self.x, self._t_i))
-                self._t_i += self._dt
-                if self._t_i > self._t_f:
-                    self._t_i = self._t_0
-            return self.line,
+            pass
 
         self.anim = FuncAnimation(
             self.fig, animate, frames=self._len, interval=1000/fps)
@@ -108,3 +72,57 @@ class Animate():
                 self.line.set_data(self.x, self.func(self.x, self._t_i))
                 self.fig.canvas.draw()
         self.slider.on_changed(set_time)
+
+
+class Animate(Animation):
+    def __init__(self, func, xlim, ylim, time, fps=30, res=1000,
+                 pre_calc=False):
+        """
+        Animates a function f: [a,b]x[t0,tf] -> [c,d]
+
+        func : callable
+        Takes a numpy array for the x domain and a scalar for the time domain
+
+        xlim : a sequence of floats ex. [a,b] or (a,b)
+        ylim : a sequence of floats ex. [c,d] or (c,d)
+        time : a sequence of floats ex. [t0,tf] or (t0,tf) (represents seconds)
+
+        fps : float, optional
+            indicates how many frames per second to display
+        res : integer, optional
+            indicates the number of subdivisions of xlim
+        pre_calc : bool, optional
+            if true, calculates func for all time before plotting
+            if false, calculates func as needed
+        """
+
+        Animation.__init__(self, time, fps, pre_calc)
+
+        self.func = func
+        self.x = np.linspace(xlim[0], xlim[1], res)
+
+        self.ax = plt.axes(xlim=xlim, ylim=ylim)
+        self.line, = self.ax.plot(self.x, func(self.x, time[0]))
+
+        if pre_calc:
+            self.data = []
+            self._i = 0
+            for t in self.t:
+                self.data.append(func(self.x, t))
+
+        def animate(i):
+            if self._has_slider:
+                self.slider.set_val(self._t_i)
+            if pre_calc:
+                self.line.set_data(self.x, self.data[self._i])
+                self._i = (self._i + 1) % self._len
+                self._t_i = self.t[self._i]
+            else:
+                self.line.set_data(self.x, func(self.x, self._t_i))
+                self._t_i += self._dt
+                if self._t_i > self._t_f:
+                    self._t_i = self._t_0
+            return self.line,
+
+        self.anim = FuncAnimation(
+            self.fig, animate, frames=self._len, interval=1000/fps)
