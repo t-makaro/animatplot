@@ -8,17 +8,26 @@ def psi(x, t):
             + .5*exp(t*4j)*sin(2*pi*x)
             + .5*exp(t*9j)*sin(3*pi*x))
 
-def p(x, t):
-    return 2*abs(psi(x, t))**2
+def real_part(x, t):
+    return psi(x,t).real
 
-ani = Animate(p, [0, 1], [0, 4.5], [0, 10], fps=30, res=100, pre_calc=True)
+def imag_part(x,t):
+    return psi(x,t).imag
 
+#Animate will take a single callable or an iterable of callables
+ani = Animate((real_part,imag_part), [0, 1], [-2, 2], [0, 10],
+              fps=60, res=1000, pre_calc=True)
+
+#Your standard matplotlib stuff
 plt.title(r'Particle in a Box: $|\Psi\rangle = \frac{1}{\sqrt{2}}'
           r'|E_1\rangle + \frac{1}{2}|E_2\rangle + \frac{1}{2}|E_3\rangle$',
           y=1.03)
 plt.xlabel('position')
-plt.ylabel(r'$|\Psi|^2$')
+plt.ylabel(r'$\Psi$')
+plt.legend(['Real','Imaginary'])
 
+#Add the time slider and play/pause button
 ani.toggle()
 ani.timeline()
+
 plt.show()

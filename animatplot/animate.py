@@ -1,6 +1,7 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
+import collections
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
@@ -23,7 +24,7 @@ class Animation:
         self._pre_calc = pre_calc
         self._pause = False
         self._has_slider = False
-        self._len = len(self.t)
+        self._len_t = len(self.t)
 
         self.fig = plt.gcf()
 
@@ -31,7 +32,7 @@ class Animation:
             pass
 
         self.anim = FuncAnimation(
-            self.fig, animate, frames=self._len, interval=1000/fps)
+            self.fig, animate, frames=self._len_t, interval=1000/fps)
 
     def toggle(self, rect=[.78, .03, .1, .07], adjust_plot={'bottom': .2}):
         """Creates a play/pause button to start/stop the animation"""
@@ -69,10 +70,23 @@ class Animation:
             if self._pre_calc:
                 self._i = np.where(abs(self.t-self._t_i) <= self._dt)[0][0]
             if self._pause:
-                self.line.set_data(self.x, self.func(self.x, self._t_i))
+                self._update_state()
                 self.fig.canvas.draw()
         self.slider.on_changed(set_time)
 
+    def _update_state(self):
+        pass
+
+    def _update_time(self):
+        if self._has_slider:
+                self.slider.set_val(self._t_i)
+        if self._pre_calc:
+            self._i = (self._i + 1) % self._len_t
+            self._t_i = self.t[self._i]
+        else:
+            self._t_i += self._dt
+            if self._t_i > self._t_f:
+                self._t_i = self._t_0
 
 class Animate(Animation):
     def __init__(self, func, xlim, ylim, time, fps=30, res=1000,
@@ -80,7 +94,7 @@ class Animate(Animation):
         """
         Animates a function f: [a,b]x[t0,tf] -> [c,d]
 
-        func : callable
+        func : callable or iterable of callables
         Takes a numpy array for the x domain and a scalar for the time domain
 
         xlim : a sequence of floats ex. [a,b] or (a,b)
@@ -96,33 +110,43 @@ class Animate(Animation):
             if false, calculates func as needed
         """
 
+        if isinstance(func, collections.Iterable):
+            self.funcs = list(func)
+        else:
+            self.funcs = [func]
+
         Animation.__init__(self, time, fps, pre_calc)
 
-        self.func = func
+        self.lines = []
+        self._len_l = len(self.funcs)
         self.x = np.linspace(xlim[0], xlim[1], res)
 
         self.ax = plt.axes(xlim=xlim, ylim=ylim)
-        self.line, = self.ax.plot(self.x, func(self.x, time[0]))
+        for func in self.funcs:
+            line, = self.ax.plot(self.x, func(self.x, time[0]))
+            self.lines.append(line)
 
         if pre_calc:
             self.data = []
             self._i = 0
-            for t in self.t:
-                self.data.append(func(self.x, t))
+            for func in self.funcs:
+                datum = []
+                for t in self.t:
+                    datum.append(func(self.x, t))
+                self.data.append(datum)
 
         def animate(i):
-            if self._has_slider:
-                self.slider.set_val(self._t_i)
-            if pre_calc:
-                self.line.set_data(self.x, self.data[self._i])
-                self._i = (self._i + 1) % self._len
-                self._t_i = self.t[self._i]
-            else:
-                self.line.set_data(self.x, func(self.x, self._t_i))
-                self._t_i += self._dt
-                if self._t_i > self._t_f:
-                    self._t_i = self._t_0
-            return self.line,
+            self._update_state()
+            self._update_time()
+            return self.lines
 
         self.anim = FuncAnimation(
-            self.fig, animate, frames=self._len, interval=1000/fps)
+            self.fig, animate, frames=self._len_t, interval=1000/fps)
+
+    def _update_state(self):
+        if self._pre_calc:
+            for i in range(self._len_l):
+                self.lines[i].set_data(self.x, self.data[i][self._i])
+        else:
+            for i in range(self._len_l):
+                self.lines[i].set_data(self.x, self.funcs[i](self.x, self._t_i))
