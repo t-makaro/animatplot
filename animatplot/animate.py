@@ -79,7 +79,7 @@ class Animation:
 
     def _update_time(self):
         if self._has_slider:
-                self.slider.set_val(self._t_i)
+            self.slider.set_val(self._t_i)
         if self._pre_calc:
             self._i = (self._i + 1) % self._len_t
             self._t_i = self.t[self._i]
@@ -96,10 +96,11 @@ class Animate(Animation):
 
         func : callable or iterable of callables
         Takes a numpy array for the x domain and a scalar for the time domain
+        Returns a numpy array for the y domain
 
         xlim : a sequence of floats ex. [a,b] or (a,b)
         ylim : a sequence of floats ex. [c,d] or (c,d)
-        time : a sequence of floats ex. [t0,tf] or (t0,tf) (represents seconds)
+        time : a sequence of floats ex. [t0,tf] or (t0,tf) (in seconds)
 
         fps : float, optional
             indicates how many frames per second to display
@@ -149,4 +150,70 @@ class Animate(Animation):
                 self.lines[i].set_data(self.x, self.data[i][self._i])
         else:
             for i in range(self._len_l):
-                self.lines[i].set_data(self.x, self.funcs[i](self.x, self._t_i))
+                self.lines[i].set_data(self.x,
+                                       self.funcs[i](self.x, self._t_i))
+
+class AnimateParametric(Animation):
+    def __init__(self, func, xlim, ylim, time, fps=30,
+                 pre_calc=False):
+        """
+        Animates a function f: [t0,tf] -> [a,b]x[c,d]
+
+        func : callable or iterable of callables
+        Takes a numpy array for the time domain
+        Returns a list of x coordinates and a list of y coordinates
+
+        xlim : a sequence of floats ex. [a,b] or (a,b)
+        ylim : a sequence of floats ex. [c,d] or (c,d)
+        time : a sequence of floats ex. [t0,tf] or (t0,tf) (in seconds)
+
+        fps : float, optional
+            indicates how many frames per second to display
+        pre_calc : bool, optional
+            if true, calculates func for all time before plotting
+            if false, calculates func as needed
+        """
+
+        if isinstance(func, collections.Iterable):
+            self.funcs = list(func)
+        else:
+            self.funcs = [func]
+
+        Animation.__init__(self, time, fps, pre_calc)
+
+        self.lines = []
+        self._len_l = len(self.funcs)
+
+        self.ax = plt.axes(xlim=xlim, ylim=ylim)
+        for func in self.funcs:
+            x, y = func(time[0])
+            line, = self.ax.plot(x, y)
+            self.lines.append(line)
+
+        if pre_calc:
+            self.x_data = []
+            self.y_data = []
+            self._i = 0
+            for func in self.funcs:
+                x, y = func(self.t)
+                self.x_data.append(x)
+                self.y_data.append(y)
+
+        def animate(i):
+            self._update_state()
+            self._update_time()
+            return self.lines
+
+        self.anim = FuncAnimation(
+            self.fig, animate, frames=self._len_t, interval=1000/fps)
+
+    def _update_state(self):
+        if self._pre_calc:
+            for i in range(self._len_l):
+                self.lines[i].set_data(self.x_data[i][:self._i+1],
+                                       self.y_data[i][:self._i+1])
+        else:
+            t = np.arange(self._t_0, self._t_i+self._dt, self._dt)
+            for i in range(self._len_l):
+                x, y = self.funcs[i](t)
+                self.lines[i].set_data(x, y)
