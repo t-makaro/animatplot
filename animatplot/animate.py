@@ -57,16 +57,20 @@ class Animation:
             self._pause ^= True
         self.button.on_clicked(pause)
 
-    def timeline(self, rect=[.18, .05, .5, .03], adjust_plot={'bottom': .2}):
+    def timeline(self, rect=[.18, .05, .5, .03], adjust_plot={'bottom': .2},
+                 t_scale=(1,'')):
         """Create a timeline slider."""
         plt.subplots_adjust(**adjust_plot)
         self.slider_ax = plt.axes(rect)
         self.slider = Slider(
-            self.slider_ax, "Time", self.t[0], self.t[-1], valinit=self.t[0])
+            self.slider_ax, "Time", self.t[0], self.t[-1],
+            valinit=self.t[0], valfmt=('%1.2f'+t_scale[1]))
         self._has_slider = True
 
         def set_time(t):
             self._t_i = self.slider.val
+            self.slider.valtext.set_text(
+                self.slider.valfmt % (self.slider.val*t_scale[0]))
             if self._pre_calc:
                 self._i = np.where(abs(self.t-self._t_i) <= self._dt)[0][0]
             if self._pause:
