@@ -58,7 +58,7 @@ class Animation:
         self.button.on_clicked(pause)
 
     def timeline(self, rect=[.18, .05, .5, .03], adjust_plot={'bottom': .2},
-                 t_scale=(1,'')):
+                 t_scale=(1, '')):
         """Create a timeline slider."""
         plt.subplots_adjust(**adjust_plot)
         self.slider_ax = plt.axes(rect)
