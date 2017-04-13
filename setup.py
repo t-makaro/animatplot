@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='animatplot',
-      version='0.1.dev2',
+      version='0.1.dev3',
       description='Making animating in matplotlib easy',
       url='https://github.com/t-makaro/animatplot/',
       author='Tyler Makaro',
