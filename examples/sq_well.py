@@ -1,36 +1,28 @@
+import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import PillowWriter
 import animatplot as aplt
-from numpy import sin, exp, pi
-import numpy as np
 
 
 def psi(x, t):
-    return (2**-.5*exp(t*1j)*sin(pi*x)
-            + .5*exp(t*4j)*sin(2*pi*x)
-            + .5*exp(t*9j)*sin(3*pi*x))
-
-
-def real_part(x, t):
-    return psi(x, t).real
-
-
-def imag_part(x, t):
-    return psi(x, t).imag
+    return (2**-.5*np.exp(t*1j)*np.sin(np.pi*x)
+            + .5*np.exp(t*4j)*np.sin(2*np.pi*x)
+            + .5*np.exp(t*9j)*np.sin(3*np.pi*x))
 
 
 x = np.linspace(0, 1, 20)
 t = np.linspace(0, 10, 100)
 
 X, T = np.meshgrid(x, t)
-Y1 = real_part(X, T)
-Y2 = imag_part(X, T)
+Y1 = psi(X, T).real
+Y2 = psi(X, T).imag
 
 timeline = aplt.Timeline(t, 's', 24)
 
 ax = plt.axes(xlim=[0, 1], ylim=[-2, 2])
 block1 = aplt.blocks.Line(X, Y1, ax)
 block2 = aplt.blocks.Line(X, Y2, ax)
+
 anim = aplt.Animation([block1, block2], timeline)
 
 # Your standard matplotlib stuff
