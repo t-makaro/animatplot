@@ -31,7 +31,7 @@ class Timeline:
     def __repr__(self):
         time = repr(self.t)
         units = repr(self.units)
-        return f"timeline(t={time}, units={units}, fps={self.fps})"
+        return f"Timeline(t={time}, units={units}, fps={self.fps})"
 
     def __len__(self):
         return self._len
