@@ -1,5 +1,6 @@
 from matplotlib.animation import FuncAnimation
 from matplotlib.widgets import Button, Slider
+import matplotlib.pyplot as plt
 
 
 class Animation:
@@ -10,16 +11,22 @@ class Animation:
     animation :
         a matplotlib animation returned from FuncAnimation
     """
-    def __init__(self, blocks, timeline, fig, init_func=None):
-
+    def __init__(self, blocks, timeline, fig=None, init_func=None):
+        """
+        Parameters
+        ----------
+        blocks : list of animatplot.animations.Block
+            A list of blocks to be animated.
+        timeline : timeline
+        """
         _len_time = len(timeline)
         for block in blocks:
             if len(block) != _len_time:
-                raise "Block not all the same length"
+                raise "All blocks must animate for the same amount of time"
 
         self.blocks = blocks
         self.timeline = timeline
-        self.fig = fig
+        self.fig = plt.gcf() if fig is None else fig
         self._has_slider = False
 
         def init():
@@ -34,13 +41,14 @@ class Animation:
             for block in self.blocks:
                 updates.append(block.update(self.timeline.index))
             if self._has_slider:
-                self.slider.set_val(self.index)
+                self.slider.set_val(self.timeline.index)
             self.timeline.update()
+            return updates
 
         self.animation = FuncAnimation(
             self.fig, animate,
             frames=self.timeline._len,
-            init_func=init,
+            # init_func=init,
             interval=1000/timeline.fps
         )
 
@@ -79,7 +87,7 @@ class Animation:
             self._pause ^= True
         self.button.on_clicked(pause)
 
-    def slider(self, ax=None):
+    def timeline_slider(self, ax=None, valfmt='%1.2f'):
         """Create a timeline slider.
 
         Parameters
@@ -97,9 +105,9 @@ class Animation:
             self.slider_ax = ax
 
         self.slider = Slider(
-            self.slider_ax, "Time", 0, self.timeline._len,
+            self.slider_ax, "Time", 0, self.timeline._len-1,
             valinit=0,
-            valfmt=('%1.2f'+self.timeline.units),
+            valfmt=(valfmt+self.timeline.units),
             valstep=1
         )
         self._has_slider = True
@@ -113,3 +121,10 @@ class Animation:
                     block.update(self.timeline.index)
                 self.fig.canvas.draw()
         self.slider.on_changed(set_time)
+
+    def save(self, *args, **kwargs):
+        """Saves a figure
+
+        A wrapper around matplotlib's animation.save()
+        """
+        self.animation.save(*args, **kwargs)

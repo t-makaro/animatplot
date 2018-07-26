@@ -6,7 +6,7 @@ class Timeline:
     """
     An object to contain and control all of the time
     """
-    def __init__(self, t, units='', fps=30):
+    def __init__(self, t, units='', fps=24):
         """
         Parameters
         ----------

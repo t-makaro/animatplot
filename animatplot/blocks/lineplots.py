@@ -2,15 +2,15 @@ from .base import Block
 
 
 class Line(Block):
-    def __init__(self, x, y, axis=None):
+    def __init__(self, x, y, axis):
         if x.shape != y.shape:
             raise "x, y must be the same shape"
         self.x = x
         self.y = y
         self.ax = axis
 
-    def init(self):
-        self.line, = self.ax.plot(self.x[:, 0], self.y[:, 0])
+        # def init(self):
+        self.line, = self.ax.plot(self.x[0, :], self.y[0, :])
 
     def update(self, i):
         x_vector = self.x[i, :]
