@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
-from animatplot.animate import Animate
+import animatplot as aplt
 from numpy import sin, exp, pi
+import numpy as np
 
 
 def psi(x, t):
@@ -16,20 +17,17 @@ def real_part(x, t):
 def imag_part(x, t):
     return psi(x, t).imag
 
-# Animate will take a single callable or an iterable of callables
-ani = Animate((real_part, imag_part), [0, 1], [-2, 2], [0, 10],
-              fps=60, res=1000, pre_calc=True)
+x = np.linspace(0, 1, 20)
+t = np.linspace(0, 10, 100)
 
-# Your standard matplotlib stuff
-plt.title(r'Particle in a Box: $|\Psi\rangle = \frac{1}{\sqrt{2}}'
-          r'|E_1\rangle + \frac{1}{2}|E_2\rangle + \frac{1}{2}|E_3\rangle$',
-          y=1.03)
-plt.xlabel('position')
-plt.ylabel(r'$\Psi$')
-plt.legend(['Real', 'Imaginary'])
+X, T = np.meshgrid(x, t)
+Y = real_part(X, T)
 
-# Add the time slider and play/pause button
-ani.toggle()
-ani.timeline()
+timeline = aplt.Timeline(t)
+
+ax = plt.gca()
+fig = plt.gcf()
+block = aplt.blocks.Line(X, Y, ax)
+anim = aplt.Animation([block], timeline, fig)
 
 plt.show()

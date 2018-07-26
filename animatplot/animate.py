@@ -92,6 +92,7 @@ class Animation:
             if self._t_i > self._t_f:
                 self._t_i = self._t_0
 
+
 class Animate(Animation):
     def __init__(self, func, xlim, ylim, time, fps=30, res=1000,
                  pre_calc=False):
@@ -156,6 +157,7 @@ class Animate(Animation):
             for i in range(self._len_l):
                 self.lines[i].set_data(self.x,
                                        self.funcs[i](self.x, self._t_i))
+
 
 class AnimateParametric(Animation):
     def __init__(self, func, xlim, ylim, time, fps=30,
