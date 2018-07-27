@@ -1,6 +1,9 @@
 # animatplot
 A python package for animating plots build on matplotlib.
 
+## Requires
+- Python >= 3.6     (because f-strings)
+- Matplotlib >= 2.2 (because [sliders have discrete values](https://matplotlib.org/users/whats_new.html#slider-ui-widget-can-snap-to-discrete-values))
 ## Installation
 ```bash
 pip install animatplot

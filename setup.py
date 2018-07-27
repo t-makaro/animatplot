@@ -12,7 +12,7 @@ setup(name='animatplot',
       author_email='',
       license='MIT',
       packages=['animatplot'],
-      install_requires=['matplotlib'],
+      install_requires=['matplotlib>=2.2'],
       classifiers=[
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: MIT License',
