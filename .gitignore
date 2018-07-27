@@ -90,3 +90,9 @@ ENV/
 
 # pytest
 .pytest_cache/
+
+# vscode
+.vscode
+
+# vscode reST doc preview
+_build

@@ -123,7 +123,7 @@ class Animation:
                 self.fig.canvas.draw()
         self.slider.on_changed(set_time)
 
-    def savegif(self, name):
+    def save_gif(self, name):
         """Save the animation to a gif
 
         A convience function. Provided to let the user avoid dealing
