@@ -9,7 +9,10 @@ A python package for animating plots build on matplotlib.
 pip install animatplot
 ```
 
-### Dev Install
+## Documentation
+Documentation can be found [here](https://animatplot.readthedocs.io/en/latest/)
+
+## Dev Install
 ```bash
 git clone https://github.com/t-makaro/animatplot.git
 pip install -e .
