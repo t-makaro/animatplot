@@ -1,4 +1,4 @@
-from matplotlib.animation import FuncAnimation
+from matplotlib.animation import FuncAnimation, PillowWriter
 from matplotlib.widgets import Button, Slider
 import matplotlib.pyplot as plt
 
@@ -121,6 +121,22 @@ class Animation:
                     block.update(self.timeline.index)
                 self.fig.canvas.draw()
         self.slider.on_changed(set_time)
+
+    def savegif(self, name):
+        """Save the animation to a gif
+
+        A convience function. Provided to let the user avoid dealing
+        with writers.
+
+        Parameters
+        ----------
+        name : str
+            the name of the file to be created without the file extension
+        """
+        self.animation.save(
+            name+'.gif',
+            writer=PillowWriter(fps=self.timeline.fps)
+        )
 
     def save(self, *args, **kwargs):
         """Saves a figure
