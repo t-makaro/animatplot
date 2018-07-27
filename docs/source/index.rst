@@ -1,20 +1,34 @@
-.. animatplot documentation master file, created by
-   sphinx-quickstart on Thu Jul 26 19:42:04 2018.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+animatplot
+==========
 
-Welcome to animatplot's documentation!
-======================================
+:version:
+    |release|
+:Source Code:
+    `Github page`_
+
+**animatplot** is a library for producing animated plots in python, and it is built on top of `matplotlib`_.
+
+**Contents**
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+    :maxdepth: 2
+    :caption: User Documentation
+
+    installation
+
+.. toctree::
+    :maxdepth: 1
+    :caption: Developer Documentation
+
+    developer
+
+.. toctree::
+    :maxdepth: 2
+    :caption: About
+
+    changelog
 
 
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. Links
+.. _`Github page`: http://github.com/t-makaro/animatplot
+.. _`matplotlib`: https://matplotlib.org/
