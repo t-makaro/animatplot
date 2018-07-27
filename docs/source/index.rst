@@ -1,5 +1,5 @@
 .. animatplot documentation master file, created by
-   sphinx-quickstart on Thu Jul 26 19:14:42 2018.
+   sphinx-quickstart on Thu Jul 26 19:42:04 2018.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 

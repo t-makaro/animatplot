@@ -40,14 +40,9 @@ release = '0.2.a1'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
-    'sphinx.ext.githubpages',
-    'sphinx.ext.napoleon'
 ]
-
-napoleon_numpy_docstring = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
