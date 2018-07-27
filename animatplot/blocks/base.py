@@ -19,7 +19,7 @@ class Block:
 
         To be implemented by subclasses
         """
-        raise NotImplementedError
+        raise NotImplementedError()
 
     def __len__(self):
-        raise NotImplementedError
+        raise NotImplementedError()

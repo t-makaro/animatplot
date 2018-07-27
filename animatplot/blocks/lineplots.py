@@ -5,7 +5,7 @@ from animatplot.util import parametric_line
 class Line(Block):
     def __init__(self, x, y, axis):
         if x.shape != y.shape:
-            raise "x, y must be the same shape"
+            raise ValueError("x, y must be the same shape")
         self.x = x
         self.y = y
         self.ax = axis

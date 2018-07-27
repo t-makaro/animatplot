@@ -22,7 +22,8 @@ class Animation:
         _len_time = len(timeline)
         for block in blocks:
             if len(block) != _len_time:
-                raise "All blocks must animate for the same amount of time"
+                raise ValueError(
+                    "All blocks must animate for the same amount of time")
 
         self.blocks = blocks
         self.timeline = timeline
