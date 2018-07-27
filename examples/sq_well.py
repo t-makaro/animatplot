@@ -36,6 +36,6 @@ plt.legend(['Real', 'Imaginary'])
 anim.toggle()
 anim.timeline_slider()
 
-# anim.save('test.gif', writer=PillowWriter(fps=24))
+# anim.save('sq_well.gif', writer=PillowWriter(fps=24))
 
 plt.show()

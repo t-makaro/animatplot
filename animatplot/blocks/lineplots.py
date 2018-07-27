@@ -1,4 +1,5 @@
 from .base import Block
+from animatplot.util import parametric_line
 
 
 class Line(Block):
@@ -21,3 +22,9 @@ class Line(Block):
 
     def __len__(self):
         return self.x.shape[0]
+
+
+class ParametricLine(Line):
+    def __init__(self, x, y, *args, **kwargs):
+        X, Y = parametric_line(x, y)
+        super().__init__(X, Y, *args, *kwargs)

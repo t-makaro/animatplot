@@ -1,2 +1,2 @@
 from .base import Block
-from .lineplots import Line
+from .lineplots import Line, ParametricLine
