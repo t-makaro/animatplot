@@ -23,10 +23,16 @@ project = 'animatplot'
 copyright = '2018, Tyler Makaro'
 author = 'Tyler Makaro'
 
+# Find the version number
+_version_py = '../../animatplot/_version.py'
+version_ns = {}
+with open(_version_py) as f:
+    exec(f.read(), {}, version_ns)
+
 # The short X.Y version
-version = '0.2'
+version = '.'join(map(str, version_ns[:2]))
 # The full version, including alpha/beta/rc tags
-release = '0.2.a1'
+release = version_ns['__version__']
 
 
 # -- General configuration ---------------------------------------------------
