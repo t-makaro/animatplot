@@ -30,7 +30,7 @@ with open(_version_py) as f:
     exec(f.read(), {}, version_ns)
 
 # The short X.Y version
-version = '.'join(map(str, version_ns[:2]))
+version = '%i.%i' % version_ns['version'][:2]
 # The full version, including alpha/beta/rc tags
 release = version_ns['__version__']
 
