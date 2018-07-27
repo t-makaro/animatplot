@@ -1,8 +1,12 @@
 from setuptools import setup
 
+with open('README.md') as f:
+    long_description = f.read()
+
 setup(name='animatplot',
       version='0.2.dev1',
       description='Making animating in matplotlib easy',
+      long_description=long_description,
       url='https://github.com/t-makaro/animatplot/',
       author='Tyler Makaro',
       author_email='',
