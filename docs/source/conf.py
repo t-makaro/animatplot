@@ -13,8 +13,8 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import sys
+sys.path.insert(0, os.path.abspath('../..'))
 
 
 # -- Project information -----------------------------------------------------
@@ -48,7 +48,16 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
+    # 'nbsphinx',
+    # 'sphinx_gallery.gen_gallery',
 ]
+
+# sphinx_gallery_conf = {
+#      # path to your examples scripts
+#      'examples_dirs': '../../examples',
+#      # path where to save gallery generated examples
+#      'gallery_dirs': 'auto_examples',
+# }
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

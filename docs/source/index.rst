@@ -4,7 +4,7 @@ animatplot
 :version:
     |release|
 :Source Code:
-    `Github page`_
+    `Github`_
 
 **animatplot** is a library for producing animated plots in python, and it is built on top of `matplotlib`_.
 
@@ -27,8 +27,8 @@ animatplot
     :caption: About
 
     changelog
-
+    
 
 .. Links
-.. _`Github page`: http://github.com/t-makaro/animatplot
+.. _`Github`: http://github.com/t-makaro/animatplot
 .. _`matplotlib`: https://matplotlib.org/
