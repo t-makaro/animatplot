@@ -134,6 +134,7 @@ class Animation:
         name : str
             the name of the file to be created without the file extension
         """
+        self.timeline.index -= 1  # required for proper starting point for save
         self.animation.save(
             name+'.gif',
             writer=PillowWriter(fps=self.timeline.fps)
@@ -144,4 +145,5 @@ class Animation:
 
         A wrapper around matplotlib's animation.save()
         """
+        self.timeline.index -= 1  # required for proper starting point for save
         self.animation.save(*args, **kwargs)
