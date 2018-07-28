@@ -22,4 +22,7 @@ class Block:
         raise NotImplementedError()
 
     def __len__(self):
+        """
+        Returns the length of the 'time' axis
+        """
         raise NotImplementedError()
