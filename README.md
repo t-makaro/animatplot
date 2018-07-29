@@ -10,7 +10,7 @@ pip install animatplot
 ```
 
 ## Documentation
-Documentation can be found [here](https://animatplot.readthedocs.io/en/latest/)
+Documentation can be found [here](https://animatplot.readthedocs.io/en/latest/index.html)
 
 ## Dev Install
 ```bash
