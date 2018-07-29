@@ -15,7 +15,7 @@ animatplot
     :caption: User Documentation
 
     installation
-    gallery/index.rst
+    gallery.rst
 
 .. toctree::
     :maxdepth: 1
