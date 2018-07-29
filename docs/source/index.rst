@@ -15,6 +15,7 @@ animatplot
     :caption: User Documentation
 
     installation
+    gallery/index.rst
 
 .. toctree::
     :maxdepth: 1
@@ -27,7 +28,7 @@ animatplot
     :caption: About
 
     changelog
-    
+
 
 .. Links
 .. _`Github`: http://github.com/t-makaro/animatplot
