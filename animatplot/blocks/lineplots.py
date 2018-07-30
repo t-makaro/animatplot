@@ -13,7 +13,7 @@ class Line(Block):
         # def init(self):
         self.line, = self.ax.plot(self.x[0, :], self.y[0, :])
 
-    def update(self, i):
+    def _update(self, i):
         x_vector = self.x[i, :]
         y_vector = self.y[i, :]
 

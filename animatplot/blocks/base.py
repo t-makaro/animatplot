@@ -5,7 +5,7 @@ class Block:
     def __init__(self, axis):
         pass
 
-    def init(self):
+    def _init(self):
         """
         initialize the animation.
 
@@ -13,7 +13,7 @@ class Block:
         """
         pass
 
-    def update(self, i):
+    def _update(self, i):
         """
         updates the block to display the corresponding frame i.
 

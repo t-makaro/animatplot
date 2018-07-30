@@ -28,7 +28,7 @@ class Quiver(Block):
                                 U[:, :, 0],            V[:, :, 0],
                                 pivot='mid', units='inches')
 
-    def update(self, i):
+    def _update(self, i):
         # if self.animate_UV:
         self.Q.set_UVC(self.u[:, :, i], self.v[:, :, i])
         # if self.animate_XY:

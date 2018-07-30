@@ -35,15 +35,15 @@ class Animation:
             if init_func is not None:
                 init_func()
             for block in self.blocks:
-                block.init()
+                block._init()
 
         def animate(i):
             updates = []
             for block in self.blocks:
-                updates.append(block.update(self.timeline.index))
+                updates.append(block._update(self.timeline.index))
             if self._has_slider:
                 self.slider.set_val(self.timeline.index)
-            self.timeline.update()
+            self.timeline._update()
             return updates
 
         self.animation = FuncAnimation(

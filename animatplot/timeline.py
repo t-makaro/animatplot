@@ -45,7 +45,7 @@ class Timeline:
         """
         return f"{self.__getitem__(self.index)} {self.units}"
 
-    def update(self):
+    def _update(self):
         """
         Increments the current time.
         """
