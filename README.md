@@ -2,7 +2,7 @@
 A python package for animating plots build on matplotlib.
 
 ## Requires
-- Python >= 3.6     (because f-strings)
+- Python >= 3.5
 - Matplotlib >= 2.2 (because [sliders have discrete values](https://matplotlib.org/users/whats_new.html#slider-ui-widget-can-snap-to-discrete-values))
 ## Installation
 ```bash
