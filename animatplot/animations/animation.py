@@ -8,11 +8,12 @@ class Animation:
 
     Attributes
     ----------
-    animation :
+    animation
         a matplotlib animation returned from FuncAnimation
     """
     def __init__(self, blocks, timeline, fig=None, init_func=None):
-        """
+        """Animation
+
         Parameters
         ----------
         blocks : list of animatplot.animations.Block
@@ -31,7 +32,6 @@ class Animation:
         self._has_slider = False
 
         def init():
-            """FuncAnimation will use this to inialize the plots"""
             if init_func is not None:
                 init_func()
             for block in self.blocks:
@@ -53,18 +53,24 @@ class Animation:
             interval=1000/timeline.fps
         )
 
-    def toggle(self, ax=None):
-        """Creates a play/pause button to start/stop the animation"""
+    def toggle(self, axis=None):
+        """Creates a play/pause button to start/stop the animation
+        
+        Parameters
+        ----------
+        axis
+            A matplotlib axis to attach the button to.
+        """
         self._pause = False
 
-        if ax is None:
+        if axis is None:
             adjust_plot = {'bottom': .2}
             rect = [.78, .03, .1, .07]
 
             plt.subplots_adjust(**adjust_plot)
             self.button_ax = plt.axes(rect)
         else:
-            self.button_ax = ax
+            self.button_ax = axis
 
         self.button = Button(self.button_ax, "Pause")
         self.button.label2 = self.button_ax.text(
@@ -88,22 +94,24 @@ class Animation:
             self._pause ^= True
         self.button.on_clicked(pause)
 
-    def timeline_slider(self, ax=None, valfmt='%1.2f'):
+    def timeline_slider(self, axis=None, valfmt='%1.2f'):
         """Create a timeline slider.
 
         Parameters
         ----------
-        ax : maplitlib.axes.Axes
+        axis
             A matplotlib axis to attach the slider to
+        valfmt : str
+            a format specifier use to print the time
         """
-        if ax is None:
+        if axis is None:
             adjust_plot = {'bottom': .2}
             rect = [.18, .05, .5, .03]
 
             plt.subplots_adjust(**adjust_plot)
             self.slider_ax = plt.axes(rect)
         else:
-            self.slider_ax = ax
+            self.slider_ax = axis
 
         self.slider = Slider(
             self.slider_ax, "Time", 0, self.timeline._len-1,
