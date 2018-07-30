@@ -94,7 +94,7 @@ class Animation:
         ----------
         axis : optional
             A matplotlib axis to attach the slider to
-        valfmt : str
+        valfmt : str, optional
             a format specifier use to print the time
         """
         if axis is None:
