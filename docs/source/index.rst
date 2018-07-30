@@ -15,6 +15,7 @@ animatplot
     :caption: User Documentation
 
     installation
+    api
     gallery
 
 .. toctree::

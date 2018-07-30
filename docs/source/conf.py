@@ -46,6 +46,9 @@ release = version_ns['__version__']
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.napoleon',
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
     'nbsphinx',
@@ -86,6 +89,8 @@ exclude_patterns = ['*/.ipynb_checkpoints/*']
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
 
+autosummary_generate = True
+intersphinx_mapping = {'matplotlib': ('https://matplotlib.org/', None)}
 
 # -- Options for HTML output -------------------------------------------------
 

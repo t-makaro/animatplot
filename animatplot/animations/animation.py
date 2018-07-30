@@ -4,22 +4,22 @@ import matplotlib.pyplot as plt
 
 
 class Animation:
-    """This class handles the actual animating
+    """The foundation of all animations.
+
+    Parameters
+    ----------
+    blocks : list of animatplot.animations.Block
+        A list of blocks to be animated
+    timeline : timeline
+    fig : matplotlib figure, optional
+        The figure that the animation is to occur on
 
     Attributes
     ----------
     animation
         a matplotlib animation returned from FuncAnimation
     """
-    def __init__(self, blocks, timeline, fig=None, init_func=None):
-        """Animation
-
-        Parameters
-        ----------
-        blocks : list of animatplot.animations.Block
-            A list of blocks to be animated.
-        timeline : timeline
-        """
+    def __init__(self, blocks, timeline, fig=None):
         _len_time = len(timeline)
         for block in blocks:
             if len(block) != _len_time:
@@ -30,12 +30,6 @@ class Animation:
         self.timeline = timeline
         self.fig = plt.gcf() if fig is None else fig
         self._has_slider = False
-
-        def init():
-            if init_func is not None:
-                init_func()
-            for block in self.blocks:
-                block._init()
 
         def animate(i):
             updates = []
@@ -49,16 +43,15 @@ class Animation:
         self.animation = FuncAnimation(
             self.fig, animate,
             frames=self.timeline._len,
-            # init_func=init,
             interval=1000/timeline.fps
         )
 
     def toggle(self, axis=None):
         """Creates a play/pause button to start/stop the animation
-        
+
         Parameters
         ----------
-        axis
+        axis : optional
             A matplotlib axis to attach the button to.
         """
         self._pause = False
@@ -99,7 +92,7 @@ class Animation:
 
         Parameters
         ----------
-        axis
+        axis : optional
             A matplotlib axis to attach the slider to
         valfmt : str
             a format specifier use to print the time
@@ -131,27 +124,27 @@ class Animation:
                 self.fig.canvas.draw()
         self.slider.on_changed(set_time)
 
-    def save_gif(self, name):
-        """Save the animation to a gif
+    def save_gif(self, filename):
+        """Saves the animation to a gif
 
         A convience function. Provided to let the user avoid dealing
         with writers.
 
         Parameters
         ----------
-        name : str
+        filename : str
             the name of the file to be created without the file extension
         """
         self.timeline.index -= 1  # required for proper starting point for save
         self.animation.save(
-            name+'.gif',
+            filename+'.gif',
             writer=PillowWriter(fps=self.timeline.fps)
         )
 
     def save(self, *args, **kwargs):
-        """Saves a figure
+        """Saves an animation
 
-        A wrapper around matplotlib's animation.save()
+        A wrapper around :meth:`matplotlib.animation.Animation.save`
         """
         self.timeline.index -= 1  # required for proper starting point for save
         self.animation.save(*args, **kwargs)
