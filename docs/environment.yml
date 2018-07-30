@@ -1,0 +1,8 @@
+name: animatplot_docs
+dependencies:
+- python==3.6
+- ipykernel
+- sphinx>=1.5.1
+- matplotlib>=2.2
+- pip:
+    - nbsphinx
