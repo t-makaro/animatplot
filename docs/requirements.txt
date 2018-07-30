@@ -1,3 +1,5 @@
 sphinx>=1.4
 ipykernel
 nbsphinx
+numpy
+matplotlib>=2.2
