@@ -32,7 +32,7 @@ Timeline
 blocks
 ------
 
-Blocks handle the animation of difference types of data.
+Blocks handle the animation of different types of data.
 The following blocks are available in ``animatplot.blocks``.
 
 .. currentmodule:: animatplot.blocks
@@ -42,3 +42,5 @@ The following blocks are available in ``animatplot.blocks``.
     Block
     Line
     Quiver
+    pcolormesh
+    imshow
