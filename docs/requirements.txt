@@ -1,4 +1,4 @@
-sphinx>=1.4
+sphinx>=1.5.1
 ipykernel
 nbsphinx
 matplotlib>=2.2

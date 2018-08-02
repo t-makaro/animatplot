@@ -3,21 +3,19 @@ import matplotlib.pyplot as plt
 
 
 class Timeline:
-    """
-    An object to contain and control all of the time
-    """
-    def __init__(self, t, units='', fps=24):
-        """
-        Parameters
-        ----------
-        t : array_like
+    """An object to contain and control all of the time
+
+    Parameters
+    ----------
+    t : array_like
             gets converted to a numpy array representing
             the time at each frame of the animation
-        units : str, optional
-            the units the time is measured in.
-        fps : float, optional
-            indicates the number of frames per second to play
-        """
+    units : str, optional
+        the units the time is measured in.
+    fps : float, optional
+        indicates the number of frames per second to play
+    """
+    def __init__(self, t, units='', fps=24):
         self.t = np.array(t)
         self.fps = fps
         self.units = units
@@ -38,7 +36,5 @@ class Timeline:
         return self._len
 
     def _update(self):
-        """
-        Increments the current time.
-        """
+        """Increments the current time."""
         self.index = (self.index + 1) % self._len

@@ -1,6 +1,13 @@
 Developer Setup
 ===============
 
+Requirements
+------------
+
+The following are required to build the docs.
+
+.. literalinclude:: ../requirements.txt
+
 Install
 -------
 Clone and install the repository::
@@ -18,7 +25,7 @@ From the root animatplot directory simply run::
 
 .. warning::
 
-    Tests are currently very limited. Please run examples to ensure every works.
+    Tests are currently very limited. Please run examples to ensure everything works.
 
 Linting
 -------
