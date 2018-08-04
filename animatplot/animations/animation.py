@@ -120,7 +120,7 @@ class Animation:
                 self.slider.valfmt % (self.timeline[self.timeline.index]))
             if self._pause:
                 for block in self.blocks:
-                    block.update(self.timeline.index)
+                    block._update(self.timeline.index)
                 self.fig.canvas.draw()
         self.slider.on_changed(set_time)
 
