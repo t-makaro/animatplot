@@ -24,7 +24,8 @@ class Quiver(Block):
         xy_slice = [slice(None)]*2 + ([slice(1)] if len(X.shape) == 3 else [])
         # uv_slice = [slice(None)]*2 +([slice(1)] if len(U.shape) == 3 else [])
 
-        self.Q = self.ax.quiver(X[xy_slice].squeeze(), Y[xy_slice].squeeze(),
+        self.Q = self.ax.quiver(X[tuple(xy_slice)].squeeze(),
+                                Y[tuple(xy_slice)].squeeze(),
                                 U[:, :, 0],            V[:, :, 0],
                                 pivot='mid', units='inches')
 
