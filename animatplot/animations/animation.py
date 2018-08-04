@@ -95,7 +95,8 @@ class Animation:
         axis : optional
             A matplotlib axis to attach the slider to
         valfmt : str, optional
-            a format specifier use to print the time
+            a format specifier used to print the time
+            Defaults to '%1.2f'
         """
         if axis is None:
             adjust_plot = {'bottom': .2}
@@ -123,6 +124,21 @@ class Animation:
                     block._update(self.timeline.index)
                 self.fig.canvas.draw()
         self.slider.on_changed(set_time)
+
+    def controls(self, timeline_slider_args={}, toggle_args={}):
+        """Creates interactive controls for the animation
+
+        Creates both a play/pause button, and a time slider at once
+
+        Parameters
+        ----------
+        timeline_slider_args : Dict, optional
+            A dictionary of arguments to be passed to timeline_slider()
+        toggle_args : Dict, optional
+            A dictionary of argyments to be passed to toggle()
+        """
+        self.timeline_slider(**timeline_slider_args)
+        self.toggle(**toggle_args)
 
     def save_gif(self, filename):
         """Saves the animation to a gif
