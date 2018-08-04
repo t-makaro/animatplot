@@ -1,7 +1,11 @@
+import matplotlib.pyplot as plt
+
+
 class Block:
     """A base class for blocks"""
-    def __init__(self, axis):
-        self.ax = axis
+    def __init__(self, axis=None, t_axis=None):
+        self.ax = axis if axis is not None else plt.gca()
+        self.t_axis = t_axis
 
     def _init(self):
         """initialize the animation.
@@ -20,3 +24,10 @@ class Block:
     def __len__(self):
         """Returns the length of the 'time' axis"""
         raise NotImplementedError()
+
+    def _make_slice(self, i, dim):
+        if self._is_list:
+            return i
+        Slice = [slice(None)]*dim
+        Slice[self.t_axis] = i
+        return tuple(Slice)

@@ -14,7 +14,7 @@ class Quiver(Block):
     Notes
     -----
     This block accepts additional keyword arguments to be passed to
-    :meth:`matplotlib.pyplot.quiver`
+    :meth:`matplotlib.axes.Axes.quiver`
     """
     def __init__(self, X, Y, U, V, axis=None, **kwargs):
         if X.shape != Y.shape:
