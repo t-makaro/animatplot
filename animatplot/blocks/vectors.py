@@ -4,8 +4,19 @@ from .base import Block
 class Quiver(Block):
     """
     A block for animated quiver plots
+
+    Parameters
+    ----------
+    X, Y : 2D or 3D numpy array
+    U, V : 3D numpy array
+    axis : matplotlib axis, optional
+        The axis to the block to
+    Notes
+    -----
+    This block accepts additional keyword arguments to be passed to
+    :meth:`matplotlib.pyplot.quiver`
     """
-    def __init__(self, X, Y, U, V, axis=None):
+    def __init__(self, X, Y, U, V, axis=None, **kwargs):
         if X.shape != Y.shape:
             raise ValueError("X, Y must have the same shape")
         if U.shape != V.shape:
@@ -27,7 +38,7 @@ class Quiver(Block):
         self.Q = self.ax.quiver(X[tuple(xy_slice)].squeeze(),
                                 Y[tuple(xy_slice)].squeeze(),
                                 U[:, :, 0],            V[:, :, 0],
-                                pivot='mid', units='inches')
+                                **kwargs)
 
     def _update(self, i):
         # if self.animate_UV:
