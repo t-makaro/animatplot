@@ -15,6 +15,7 @@ animatplot
     :caption: User Documentation
 
     installation
+    tutorial/tutorial
     api
     gallery
 
