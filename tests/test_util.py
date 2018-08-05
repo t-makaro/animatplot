@@ -24,12 +24,12 @@ def test_parametric_line():
     assert (Y_valid[~mask] == Y_test[~mask]).all()
 
 
-def test_compactify():
+def test_demeshgrid():
     x = np.linspace(-1, 1, 10)
     t = np.linspace(0, 1, 10)
 
     _, T = np.meshgrid(x, t)
-    assert (util.compactify(T) == t).all()
+    assert (util.demeshgrid(T) == t).all()
 
     _, _, T = np.meshgrid(x, x, t)
-    assert (util.compactify(T) == t).all()
+    assert (util.demeshgrid(T) == t).all()

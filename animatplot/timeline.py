@@ -1,5 +1,5 @@
 import numpy as np
-from animatplot.util import compactify
+from animatplot.util import demeshgrid
 
 
 class Timeline:
@@ -18,7 +18,7 @@ class Timeline:
     def __init__(self, t, units='', fps=10):
         t = np.asanyarray(t)
         if len(t.shape) > 1:
-            self.t = compactify(t)
+            self.t = demeshgrid(t)
             if self.t is None:
                 raise ValueError("Unable to interpret time values."
                                  "Please try passing a 1D array instead.")

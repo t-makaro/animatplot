@@ -20,7 +20,7 @@ def parametric_line(x, y):
     return X, Y
 
 
-def compactify(arr):
+def demeshgrid(arr):
     """Turns an ndarray created by a meshgrid back into a 1D array
 
     Parameters
