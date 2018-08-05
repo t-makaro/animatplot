@@ -87,7 +87,7 @@ class Animation:
             self._pause ^= True
         self.button.on_clicked(pause)
 
-    def timeline_slider(self, axis=None, valfmt='%1.2f'):
+    def timeline_slider(self, axis=None, valfmt='%1.2f', color=None):
         """Create a timeline slider.
 
         Parameters
@@ -97,6 +97,8 @@ class Animation:
         valfmt : str, optional
             a format specifier used to print the time
             Defaults to '%1.2f'
+        color :
+            The color of the slider.
         """
         if axis is None:
             adjust_plot = {'bottom': .2}
@@ -111,7 +113,7 @@ class Animation:
             self.slider_ax, "Time", 0, self.timeline._len-1,
             valinit=0,
             valfmt=(valfmt+self.timeline.units),
-            valstep=1
+            valstep=1, color=color
         )
         self._has_slider = True
 

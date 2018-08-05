@@ -1,4 +1,5 @@
 from .base import Block
+import matplotlib.pyplot as plt
 
 
 class Pcolormesh(Block):
@@ -15,7 +16,7 @@ class Pcolormesh(Block):
     All other keyword arguments get passed to ``axis.pcolormesh``
     see :meth:`matplotlib.axes.Axes.pcolormesh` for details.
     """
-    def __init__(self, *args, axis, **kwargs):
+    def __init__(self, *args, axis=None, **kwargs):
         if len(args) == 1:
             self.C = args[0]
             self._arg_len = 1
@@ -27,22 +28,19 @@ class Pcolormesh(Block):
         else:
             raise TypeError(
                 'Illegal arguments to pcolormesh; see help(pcolormesh)')
-        if len(self.C.shape != 3):
+        if len(self.C.shape) != 3:
             raise TypeError('C must be a 3D array')
 
         super().__init__(axis)
 
         if self._arg_len == 1:
-            self.quad = axis.pcolormesh(self.C[:, :, 0], **kwargs)
+            self.quad = self.ax.pcolormesh(self.C[:, :, 0], **kwargs)
         elif self._arg_len == 3:
-            self.quad = axis.pcolormesh(self.X, self.Y, self.C[:, :, 0],
-                                        **kwargs)
+            self.quad = self.ax.pcolormesh(self.X, self.Y, self.C[:, :, 0],
+                                           **kwargs)
 
     def _update(self, i):
-        if self._arg_len == 1:
-            self.quad.set_array(self.C[:, :, i])
-        else:
-            self.quad.set_array(self.X, self.Y, self.C[:, :, i])
+        self.quad.set_array(self.C[:-1, :-1, i].ravel())
         return self.quad
 
     def __len__(self):
