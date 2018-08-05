@@ -26,7 +26,7 @@ class Nuke(Block):
         self.fargs = fargs
         super().__init__(axis)
 
-        func(0, *args)
+        func(0, *fargs)
 
     def _update(self, i):
         self.ax.clear()
