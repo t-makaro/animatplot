@@ -43,7 +43,7 @@ class Pcolormesh(Block):
             self.quad.set_array(self.C[:, :, i])
         else:
             self.quad.set_array(self.X, self.Y, self.C[:, :, i])
-        return quad
+        return self.quad
 
     def __len__(self):
         return self.C.shape[2]
@@ -54,11 +54,11 @@ class Imshow(Block):
         self.X = X
         super().__init__(axis)
 
-        im_slice = [slice(none)]*(len(X.shape)-1) + [slice(1)]
+        im_slice = [slice(None)]*(len(X.shape)-1) + [slice(1)]
         self.im = self.ax.imshow(X[im_slice], **kwargs)
 
     def _update(self, i):
-        im_slice = [slice(none)]*(len(self.X.shape)-1) + [slice(i)]
+        im_slice = [slice(None)]*(len(self.X.shape)-1) + [slice(i)]
         self.im.set_array(self.X[im_slice])
 
     def __len__(self):

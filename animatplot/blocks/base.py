@@ -6,6 +6,7 @@ class Block:
     def __init__(self, axis=None, t_axis=None):
         self.ax = axis if axis is not None else plt.gca()
         self.t_axis = t_axis
+        self._is_list = False
 
     def _init(self):
         """initialize the animation.
