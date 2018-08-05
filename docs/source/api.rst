@@ -42,5 +42,6 @@ The following blocks are available in ``animatplot.blocks``.
     Block
     Line
     Quiver
-    pcolormesh
-    imshow
+    Pcolormesh
+    Imshow
+    Nuke

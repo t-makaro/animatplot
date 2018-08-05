@@ -1,7 +1,7 @@
 from .base import Block
 
 
-class pcolormesh(Block):
+class Pcolormesh(Block):
     """Animates a pcolormesh
 
     Parameters
@@ -49,7 +49,7 @@ class pcolormesh(Block):
         return self.C.shape[2]
 
 
-class imshow(Block):
+class Imshow(Block):
     def __init__(self, X, axis, **kwargs):
         self.X = X
         super().__init__(axis)
