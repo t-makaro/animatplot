@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
+from animatplot.util import compactify
 
 
 class Timeline:
@@ -15,8 +15,15 @@ class Timeline:
     fps : float, optional
         indicates the number of frames per second to play
     """
-    def __init__(self, t, units='', fps=24):
-        self.t = np.array(t)
+    def __init__(self, t, units='', fps=10):
+        t = np.asanyarray(t)
+        if len(t.shape) > 1:
+            self.t = compactify(t)
+            if self.t is None:
+                raise ValueError("Unable to interpret time values."
+                                 "Please try passing a 1D array instead.")
+        else:
+            self.t = t
         self.fps = fps
         self.units = units
         self.index = 0

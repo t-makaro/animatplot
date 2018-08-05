@@ -1,6 +1,7 @@
 from matplotlib.animation import FuncAnimation, PillowWriter
 from matplotlib.widgets import Button, Slider
 import matplotlib.pyplot as plt
+from animatplot import Timeline
 
 
 class Animation:
@@ -10,7 +11,10 @@ class Animation:
     ----------
     blocks : list of animatplot.animations.Block
         A list of blocks to be animated
-    timeline : timeline
+    timeline : Timeline or 1D array, optional
+        If an array is passed in, it will be converted to a Timeline.
+        If not given, a timeline will be created using the length of the
+        first block.
     fig : matplotlib figure, optional
         The figure that the animation is to occur on
 
@@ -19,15 +23,21 @@ class Animation:
     animation
         a matplotlib animation returned from FuncAnimation
     """
-    def __init__(self, blocks, timeline, fig=None):
-        _len_time = len(timeline)
+    def __init__(self, blocks, timeline=None, fig=None):
+        if timeline is None:
+            self.timeline = Timeline(range(len(blocks[0])))
+        elif not isinstance(timeline, Timeline):
+            self.timeline = Timeline(timeline)
+        else:
+            self.timeline = timeline
+
+        _len_time = len(self.timeline)
         for block in blocks:
             if len(block) != _len_time:
                 raise ValueError(
                     "All blocks must animate for the same amount of time")
 
         self.blocks = blocks
-        self.timeline = timeline
         self.fig = plt.gcf() if fig is None else fig
         self._has_slider = False
 
@@ -43,7 +53,7 @@ class Animation:
         self.animation = FuncAnimation(
             self.fig, animate,
             frames=self.timeline._len,
-            interval=1000/timeline.fps
+            interval=1000/self.timeline.fps
         )
 
     def toggle(self, axis=None):

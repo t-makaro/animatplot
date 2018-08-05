@@ -18,3 +18,21 @@ def parametric_line(x, y):
         X[i, :(i+1)] = x[:(i+1)]
         Y[i, :(i+1)] = y[:(i+1)]
     return X, Y
+
+
+def compactify(arr):
+    """Turns an ndarray created by a meshgrid back into a 1D array
+
+    Parameters
+    ----------
+    arr : array of dimension > 1
+        This array should have been created by a meshgrid.
+    """
+    dim = len(arr.shape)
+    for i in range(dim):
+        Slice1 = [0]*dim
+        Slice2 = [1]*dim
+        Slice1[i] = slice(None)
+        Slice2[i] = slice(None)
+        if (arr[tuple(Slice1)] == arr[tuple(Slice2)]).all():
+            return arr[tuple(Slice1)]
