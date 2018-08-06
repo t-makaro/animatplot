@@ -17,7 +17,7 @@ class Pcolormesh(Block):
     All other keyword arguments get passed to ``axis.pcolormesh``
     see :meth:`matplotlib.axes.Axes.pcolormesh` for details.
     """
-    def __init__(self, *args, axis=None, **kwargs):
+    def __init__(self, *args, axis=None, t_axis=0, **kwargs):
         if len(args) == 1:
             self.C = args[0]
             self._arg_len = 1

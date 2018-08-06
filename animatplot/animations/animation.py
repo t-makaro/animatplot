@@ -98,7 +98,7 @@ class Animation:
         self.button.on_clicked(pause)
 
     def timeline_slider(self, axis=None, valfmt='%1.2f', color=None):
-        """Create a timeline slider.
+        """Creates a timeline slider.
 
         Parameters
         ----------
