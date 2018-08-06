@@ -119,6 +119,9 @@ class Animation:
         else:
             self.slider_ax = axis
 
+        if self.timeline.log:
+            valfmt = '$10^{%s}$' % valfmt
+
         self.slider = Slider(
             self.slider_ax, "Time", 0, self.timeline._len-1,
             valinit=0,
