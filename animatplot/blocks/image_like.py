@@ -49,7 +49,7 @@ class Pcolormesh(Block):
 
 
 class Imshow(Block):
-    """Images a series of images
+    """Animates a series of images
 
     Parameters
     ----------

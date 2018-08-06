@@ -9,6 +9,9 @@ class Nuke(Block):
     This block can be used with other blocks so long as other
     blocks are attached to a different axis.
 
+    Only use this block as a last resort. Using the block
+    is like nuking an ant hill. Hence the name.
+
     Parameters
     ----------
     func : callable
