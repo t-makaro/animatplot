@@ -1,5 +1,6 @@
 from .base import Block
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 class Pcolormesh(Block):
@@ -48,16 +49,42 @@ class Pcolormesh(Block):
 
 
 class Imshow(Block):
-    def __init__(self, X, axis, **kwargs):
-        self.X = X
-        super().__init__(axis)
+    """Images a series of images
 
-        im_slice = [slice(None)]*(len(X.shape)-1) + [slice(1)]
-        self.im = self.ax.imshow(X[im_slice], **kwargs)
+    Parameters
+    ----------
+    images : list of 2D/3D arrays, or a 3D or 4D array
+        matplotlib considers arrays of the shape
+        (n,m), (n,m,3), and (n,m,4) to be images.
+        Images is either a list of arrays of those shapes,
+        or an array of shape (T,n,m), (T,n,m,3), or (T,n,m,4)
+        where T is the length of the time axis (assuming ``t_axis=0``).
+    axis : matplotlib axis, optional
+        The axis to attach the block to
+    t_axis : int, optional
+        The axis of the array that represents time. Defaults to 0.
+        No effect if images is a list.
+    Notes
+    -----
+    This block accepts additional keyword arguments to be passed to
+    :meth:`matplotlib.axes.Axes.imshow`
+    """
+    def __init__(self, images, axis=None, t_axis=0, **kwargs):
+        self.ims = np.asanyarray(images)
+        super().__init__(axis, t_axis)
+
+        self._is_list = isinstance(images, list)
+        self._dim = len(self.ims.shape)
+
+        Slice = self._make_slice(0, self._dim)
+        self.im = self.ax.imshow(self.ims[Slice], **kwargs)
 
     def _update(self, i):
-        im_slice = [slice(None)]*(len(self.X.shape)-1) + [slice(i)]
-        self.im.set_array(self.X[im_slice])
+        Slice = self._make_slice(i, self._dim)
+        self.im.set_array(self.ims[Slice])
+        return self.im
 
     def __len__(self):
-        return self.X.shape[-1]
+        if self._is_list:
+            return self.ims.shape[0]
+        return self.ims.shape[self.t_axis]
