@@ -1,6 +1,10 @@
 Changes to animatplot
 =====================
 
+0.2.2
+-----
+- Fix .animations and .blocks subpackages not being distributed properly. 
+
 0.2.0
 -----
 
