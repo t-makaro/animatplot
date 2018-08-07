@@ -1,4 +1,5 @@
 from .base import Block
+import numpy as np
 
 
 class Quiver(Block):
@@ -7,48 +8,53 @@ class Quiver(Block):
 
     Parameters
     ----------
-    X, Y : 2D or 3D numpy array
-    U, V : 3D numpy array
+    X : 1D or 2D numpy array
+        The x positions of the arrows. Cannot be animated.
+    Y : 1D or 2D numpy array
+        The y positions of the arrows. Cannot be animated.
+    U : 2D or 3D numpy array
+        The U displacement of the arrows. 1 dimension
+        higher than the X, Y arrays.
+    V : 2D or 3D numpy array
+        The V displcement of the arrows. 1 dimension
+        higher than the X, Y arrays.
     axis : matplotlib axis, optional
         The axis to the block to
+    t_axis : int, optional
+        The axis of the array that represents time. Defaults to 0.
+        No effect if U, V are lists.
+
     Notes
     -----
     This block accepts additional keyword arguments to be passed to
     :meth:`matplotlib.axes.Axes.quiver`
     """
-    def __init__(self, X, Y, U, V, axis=None, **kwargs):
+    def __init__(self, X, Y, U, V, axis=None, t_axis=0, **kwargs):
+        self.X = X
+        self.Y = Y
+        self.U = np.asanyarray(U)
+        self.V = np.asanyarray(V)
         if X.shape != Y.shape:
             raise ValueError("X, Y must have the same shape")
-        if U.shape != V.shape:
+        if self.U.shape != self.V.shape:
             raise ValueError("U, V must have the same shape")
 
-        # lots of features removed b/c quiver plots can't set_XY
-        # self.animate_XY = len(X.shape) == 3
-        # self.animate_UV = len(U.shape) == 3
+        super().__init__(axis, t_axis)
 
-        self.x = X
-        self.y = Y
-        self.u = U
-        self.v = V
-        self.ax = axis
+        self._dim = len(self.U.shape)
+        self._is_list = isinstance(U, list)
 
-        xy_slice = [slice(None)]*2 + ([slice(1)] if len(X.shape) == 3 else [])
-        # uv_slice = [slice(None)]*2 +([slice(1)] if len(U.shape) == 3 else [])
-
-        self.Q = self.ax.quiver(X[tuple(xy_slice)].squeeze(),
-                                Y[tuple(xy_slice)].squeeze(),
-                                U[:, :, 0],            V[:, :, 0],
+        Slice = self._make_slice(0, self._dim)
+        self.Q = self.ax.quiver(self.X, self.Y,
+                                self.U[Slice], self.V[Slice],
                                 **kwargs)
 
     def _update(self, i):
-        # if self.animate_UV:
-        self.Q.set_UVC(self.u[:, :, i], self.v[:, :, i])
-        # if self.animate_XY:
-        #    pass  # self.Q.set_XYC(self.x[:, :, i], self.y[:, :, i])
-        return self.Q,
+        Slice = self._make_slice(i, self._dim)
+        self.Q.set_UVC(self.U[Slice], self.V[Slice])
+        return self.Q
 
     def __len__(self):
-        # if len(self.x.shape) == 3:
-        #    return self.x.shape[2]
-        # else:
-        return self.u.shape[2]
+        if self._is_list:
+            return self.U.shape[0]
+        return self.U.shape[self.t_axis]

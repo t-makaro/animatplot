@@ -8,9 +8,14 @@ class Pcolormesh(Block):
 
     Parameters
     ----------
-    X, Y : 2D np.ndarray, optional
-    C : 3D np.ndarray
-    axis : matplotlib axis
+    X : 2D np.ndarray, optional
+    Y : 2D np.ndarray, optional
+    C : list of 2D np.ndarray or a 3D np.ndarray
+    axis : matplotlib axis, optional
+        an axis to attach the block to.
+    t_axis : int, optional
+        The axis of the array that represents time. Defaults to 0.
+        No effect if C is a list.
 
     Notes
     -----
@@ -29,23 +34,33 @@ class Pcolormesh(Block):
         else:
             raise TypeError(
                 'Illegal arguments to pcolormesh; see help(pcolormesh)')
-        if len(self.C.shape) != 3:
-            raise TypeError('C must be a 3D array')
 
-        super().__init__(axis)
+        super().__init__(axis, t_axis)
 
+        self._is_list = isinstance(self.C, list)
+        self.C = np.asanyarray(self.C)
+
+        Slice = self._make_slice(0, 3)
         if self._arg_len == 1:
-            self.quad = self.ax.pcolormesh(self.C[:, :, 0], **kwargs)
+            self.quad = self.ax.pcolormesh(self.C[Slice], **kwargs)
         elif self._arg_len == 3:
-            self.quad = self.ax.pcolormesh(self.X, self.Y, self.C[:, :, 0],
+            self.quad = self.ax.pcolormesh(self.X, self.Y, self.C[Slice],
                                            **kwargs)
 
     def _update(self, i):
-        self.quad.set_array(self.C[:-1, :-1, i].ravel())
+        Slice = self._make_pcolormesh_slice(i, 3)
+        self.quad.set_array(self.C[Slice].ravel())
         return self.quad
 
     def __len__(self):
         return self.C.shape[2]
+
+    def _make_pcolormesh_slice(self, i, dim):
+        if self._is_list:
+            return i
+        Slice = [slice(-1)]*3  # weird thing to make animation work
+        Slice[self.t_axis] = i
+        return tuple(Slice)
 
 
 class Imshow(Block):
@@ -64,6 +79,7 @@ class Imshow(Block):
     t_axis : int, optional
         The axis of the array that represents time. Defaults to 0.
         No effect if images is a list.
+
     Notes
     -----
     This block accepts additional keyword arguments to be passed to
