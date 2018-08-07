@@ -1,5 +1,7 @@
 # animatplot
-A python package for animating plots build on matplotlib.
+A python package for making interactive animated plots build on matplotlib.
+
+![image](docs/source/tutorial/images/multiblock.gif)
 
 ## Requires
 - Python >= 3.5
