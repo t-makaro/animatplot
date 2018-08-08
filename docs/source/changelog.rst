@@ -4,7 +4,18 @@ Changes to animatplot
 0.3.0
 -----
 
+**Features**
+
 - The Pcolormesh block now accepts 1D arrays (in addition to 2D) for x and y inputs.
+- Animation.timeline_slider new accepts a ``text`` argument to change the name of the slider.
+
+**Bug Fixes**
+
+- Previously, an Animation with a timeline_slider, but no toggle would cause an error.
+
+**Breaking Changes**
+
+- The ```text``` argument to timeline_slider is now the first positional argument. 
 
 0.2.2
 -----

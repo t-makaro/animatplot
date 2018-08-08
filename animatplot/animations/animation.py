@@ -40,6 +40,7 @@ class Animation:
         self.blocks = blocks
         self.fig = plt.gcf() if fig is None else fig
         self._has_slider = False
+        self._pause = False
 
         def animate(i):
             updates = []
@@ -64,8 +65,6 @@ class Animation:
         axis : optional
             A matplotlib axis to attach the button to.
         """
-        self._pause = False
-
         if axis is None:
             adjust_plot = {'bottom': .2}
             rect = [.78, .03, .1, .07]
@@ -97,11 +96,14 @@ class Animation:
             self._pause ^= True
         self.button.on_clicked(pause)
 
-    def timeline_slider(self, axis=None, valfmt='%1.2f', color=None):
+    def timeline_slider(self, text='Time', axis=None, valfmt='%1.2f',
+                        color=None):
         """Creates a timeline slider.
 
         Parameters
         ----------
+        text : str, optional
+            The text to display for the slider. Defaults to 'Time'
         axis : optional
             A matplotlib axis to attach the slider to
         valfmt : str, optional
@@ -123,7 +125,7 @@ class Animation:
             valfmt = '$10^{%s}$' % valfmt
 
         self.slider = Slider(
-            self.slider_ax, "Time", 0, self.timeline._len-1,
+            self.slider_ax, text, 0, self.timeline._len-1,
             valinit=0,
             valfmt=(valfmt+self.timeline.units),
             valstep=1, color=color
