@@ -4,11 +4,10 @@
 #
 version: 2
 
-add-path: &add-path
-  name: Make scripts available
+apt-run:  &apt-install
+  name: Install apt packages
   command: |
-    echo 'export PATH=$HOME/circleci/.local/bin:$PATH' >> $BASH_ENV
-    source /home/circleci/.bashrc
+    sudo apt-get install -y pandoc
 
 deps-run: &doc-deps
   name: Install Python dependencies
@@ -26,11 +25,19 @@ jobs:
     docker:
       - image: circleci/python:3.5
     steps:
+
+      - run:
+          name: Add local binaries to path
+          command: echo 'export PATH=~/.local/bin/:$PATH' >> $BASH_ENV
+
       - checkout
 
-      - run: *add-path
+      - run: *apt-install
       - run: *doc-deps
       - run: *doc-build
+
+      - store_artifacts:
+          path: docs/build/html
 
 
 workflows:

@@ -2,4 +2,5 @@ sphinx>=1.5.1
 ipykernel
 nbsphinx
 matplotlib>=2.2
+sphinx_rtd_theme
 numpy
