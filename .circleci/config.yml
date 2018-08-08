@@ -17,9 +17,13 @@ doc-run: &doc-build
 
 jobs:
   docs-python35:
+    environment:
+      BASH_ENV: ~/.bashrc
     docker:
       - image: circleci/python:3.5
     steps:
+      - run: echo 'export PATH=/home/circleci/.local/bin/:$PATH' >> $BASH_ENV
+
       - checkout
 
       - run: *doc-deps
