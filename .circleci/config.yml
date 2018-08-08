@@ -4,6 +4,11 @@
 #
 version: 2
 
+apt-run:  &apt-install
+  name: Install apt packages
+  command: |
+    sudo apt-get install -y pandoc
+
 deps-run: &doc-deps
   name: Install Python dependencies
   command: |
@@ -27,6 +32,7 @@ jobs:
 
       - checkout
 
+      - run: *apt-install
       - run: *doc-deps
       - run: *doc-build
 
