@@ -34,9 +34,9 @@ class Pcolormesh(Block):
         elif len(args) == 3:
             self.X, self.Y, self.C = args
             self._arg_len = 3
-            if len(self.X.shape) in [1, 2]:
+            if len(self.X.shape) not in [1, 2]:
                 raise TypeError('X must be a 1D or 2D arrays')
-            if len(self.Y.shape) in [1, 2]:
+            if len(self.Y.shape) not in [1, 2]:
                 raise TypeError('Y must be a 1D or 2D arrays')
         else:
             raise TypeError(
