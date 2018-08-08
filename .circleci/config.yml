@@ -1,0 +1,28 @@
+# Python CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-python/ for more details
+#
+version: 2
+
+
+deps-run: &doc-deps
+  name: Install Python dependencies
+  command: |
+    python -m pip install --user -r requirements.txt
+  working_directory: docs
+
+doc-run: &doc-build
+  name: Build documentation
+  command: make html
+  working_directory: docs
+
+jobs:
+  docs-python35:
+    docker:
+      - image: circleci/python:3.5
+    steps:
+      - checkout
+
+      - run: *doc-deps
+      - run: *doc-build
+          
