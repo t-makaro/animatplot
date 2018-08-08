@@ -21,6 +21,12 @@ class Line(Block):
 
         The default is chosen to be consistent with:
             X, T = numpy.meshgrid(x, t)
+
+    Attributes
+    ----------
+    ax : matplotlib axis
+        The matplotlib axis that the animation is attached to.
+
     Notes
     -----
     This block accepts additional keyword arguments to be passed to
@@ -61,6 +67,12 @@ class ParametricLine(Line):
         The data to be animated.
     axis : matplotlib.axes.Axes
         The axis to attach the block to.
+
+    Attributes
+    ----------
+    ax : matplotlib axis
+        The matplotlib axis that the animation is attached to.
+
     Notes
     -----
     This block accepts additional keyword arguments to be passed to

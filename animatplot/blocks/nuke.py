@@ -22,6 +22,11 @@ class Nuke(Block):
         the number of frames to display
     fargs : list, optional
         a list of arguments to pass into func
+
+    Attributes
+    ----------
+    ax : matplotlib axis
+        The matplotlib axis that the animation is attached to.
     """
     def __init__(self, func, axis, length, fargs=[]):
         self.func = func

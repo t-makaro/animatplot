@@ -2,7 +2,13 @@ import matplotlib.pyplot as plt
 
 
 class Block:
-    """A base class for blocks"""
+    """A base class for blocks
+    
+    Attributes
+    ----------
+    ax : matplotlib axis
+        The matplotlib axis that the animation is attached to.
+    """
     def __init__(self, axis=None, t_axis=None):
         self.ax = axis if axis is not None else plt.gca()
         self.t_axis = t_axis

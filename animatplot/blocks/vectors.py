@@ -24,6 +24,11 @@ class Quiver(Block):
         The axis of the array that represents time. Defaults to 0.
         No effect if U, V are lists.
 
+    Attributes
+    ----------
+    ax : matplotlib axis
+        The matplotlib axis that the animation is attached to.
+
     Notes
     -----
     This block accepts additional keyword arguments to be passed to

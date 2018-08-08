@@ -17,6 +17,11 @@ class Pcolormesh(Block):
         The axis of the array that represents time. Defaults to 0.
         No effect if C is a list.
 
+    Attributes
+    ----------
+    ax : matplotlib axis
+        The matplotlib axis that the animation is attached to.
+
     Notes
     -----
     All other keyword arguments get passed to ``axis.pcolormesh``
@@ -79,6 +84,11 @@ class Imshow(Block):
     t_axis : int, optional
         The axis of the array that represents time. Defaults to 0.
         No effect if images is a list.
+
+    Attributes
+    ----------
+    ax : matplotlib axis
+        The matplotlib axis that the animation is attached to.
 
     Notes
     -----
