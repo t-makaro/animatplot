@@ -1,6 +1,11 @@
 Changes to animatplot
 =====================
 
+0.3.0
+-----
+
+- The Pcolormesh block now accepts 1D arrays (in addition to 2D) for x and y inputs.
+
 0.2.2
 -----
 - Fix .animations and .blocks subpackages not being distributed properly. 
