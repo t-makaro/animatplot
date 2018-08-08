@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 class Block:
     """A base class for blocks
-    
+
     Attributes
     ----------
     ax : matplotlib axis
@@ -33,6 +33,7 @@ class Block:
         raise NotImplementedError()
 
     def _make_slice(self, i, dim):
+        """A helper function to slice arrays or lists"""
         if self._is_list:
             return i
         Slice = [slice(None)]*dim

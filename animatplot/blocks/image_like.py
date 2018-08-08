@@ -8,8 +8,8 @@ class Pcolormesh(Block):
 
     Parameters
     ----------
-    X : 2D np.ndarray, optional
-    Y : 2D np.ndarray, optional
+    X : 1D or 2D np.ndarray, optional
+    Y : 1D or 2D np.ndarray, optional
     C : list of 2D np.ndarray or a 3D np.ndarray
     axis : matplotlib axis, optional
         an axis to attach the block to.
@@ -34,8 +34,10 @@ class Pcolormesh(Block):
         elif len(args) == 3:
             self.X, self.Y, self.C = args
             self._arg_len = 3
-            if len(self.X.shape) != 2 or len(self.Y.shape) != 2:
-                raise TypeError('X, Y must be 2D arrays')
+            if len(self.X.shape) in [1, 2]:
+                raise TypeError('X must be a 1D or 2D arrays')
+            if len(self.Y.shape) in [1, 2]:
+                raise TypeError('Y must be a 1D or 2D arrays')
         else:
             raise TypeError(
                 'Illegal arguments to pcolormesh; see help(pcolormesh)')
