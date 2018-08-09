@@ -54,7 +54,7 @@ of convience functions for specific use cases. These functions wrap around diffe
 combinations of blocks.
 
 In general, these functions will take some data to be animated, some parameters to tell 
-animatplot what to do, then dictionarys of parameters to pass to the underlying blocks.
+animatplot what to do, then dictionaries of parameters to pass to the underlying blocks.
 
 .. warning::
 
