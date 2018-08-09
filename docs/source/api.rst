@@ -45,3 +45,26 @@ The following blocks are available in ``animatplot.blocks``.
     Pcolormesh
     Imshow
     Nuke
+
+Animatplot.animations
+---------------------
+
+The animations subpackge is an opinionated subpackage that contains a number
+of convience functions for specific use cases. These functions wrap around different
+combinations of blocks.
+
+In general, these functions will take some data to be animated, some parameters to tell 
+animatplot what to do, then dictionarys of parameters to pass to the underlying blocks.
+
+.. warning::
+
+    This subpackage may less API stable than the above (blocks/Animation/Timeline), 
+    and some of these functions may have different defaults.
+
+This submodule contains the following functions.
+
+.. currentmodule:: animatplot.animations
+.. autosummary::
+    :toctree: _as_gen/
+
+    vector_plot

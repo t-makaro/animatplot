@@ -7,7 +7,10 @@ Changes to animatplot
 **Features**
 
 - The Pcolormesh block now accepts 1D arrays (in addition to 2D) for x and y inputs.
-- Animation.timeline_slider new accepts a ``text`` argument to change the name of the slider.
+- Animation.timeline_slider now accepts a ``text`` argument to change the name of the slider.
+- New (and somewhat experimental) ``animations`` subpackage (well new to the public api). Contains some new convenice functions.
+
+    - ``vector_plot`` wraps Pcolormesh and Quiver to produce animated vector fields.
 
 **Bug Fixes**
 
