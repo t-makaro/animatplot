@@ -1,5 +1,7 @@
+import os
 from matplotlib.animation import FileMovieWriter
 from matplotlib.testing.compare import compare_images
+from matplotlib.testing.exceptions import ImageComparisonFailure
 
 
 class BunchOFiles(FileMovieWriter):
@@ -14,7 +16,7 @@ class BunchOFiles(FileMovieWriter):
 
     def __init__(self, *args, extra_args=None, **kwargs):
         # extra_args aren't used but we need to stop None from being passed
-        super().__init__(*args, extra_args='', **kwargs)
+        super().__init__(*args, extra_args=(), **kwargs)
 
     def setup(self, fig, dpi, frame_prefix):
         super().setup(fig, dpi, frame_prefix, clear_temp=False)
@@ -36,3 +38,28 @@ class BunchOFiles(FileMovieWriter):
 
     def finish(self):
         self._frame_sink().close()
+
+
+def compare_animation(anim, expected, nframes, tol):
+    __tracebackhide__ = True
+    # generate images from the animation
+    anim.save('tests/output_images/' + expected, writer=BunchOFiles())
+
+    name, format = expected.split('.')
+    for i in range(nframes):
+        image_name = '%s%d.%s' % (name, i, format)
+        expected_name = 'tests/baseline_images/' + image_name
+        actual_name = 'tests/output_images/' + image_name
+
+        err = compare_images(expected_name, actual_name, tol,
+                             in_decorator=True)
+
+        if not os.path.exists(expected_name):
+            raise ImageComparisonFailure('image does not exist: %s'
+                                         % expected_name)
+
+        if err:
+            for key in ["actual", "expected"]:
+                err[key] = os.path.relpath(err[key])
+            raise ImageComparisonFailure(
+                'images not close (RMS %(rms).3f):\n\t%(actual)s\n\t%(expected)s ' % err)
