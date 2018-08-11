@@ -28,7 +28,7 @@ test-deps-run: &test-deps
 
 tests-run: &test-run
   name: Run Pytest
-  command: python -m pytest tests/ --cov=animatplot
+  command: python -m pytest tests/ --cov
 
 jobs:
   docs-python35:

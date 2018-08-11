@@ -1,0 +1,7 @@
+[run]
+branch = true
+source = animatplot
+
+[report]
+exclude_lines =
+    raise NotImplemented
