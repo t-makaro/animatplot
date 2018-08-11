@@ -80,7 +80,9 @@ def animation_compare(baseline_images, nframes, format='.png', tol=1e-3):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             anim = func(*args, **kwargs)
-            compare_animation(anim, baseline_images, format, nframes, tol)
-            plt.close('all')
+            try:
+                compare_animation(anim, baseline_images, format, nframes, tol)
+            finally:
+                plt.close('all')
         return wrapper
     return decorator

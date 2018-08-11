@@ -1,6 +1,7 @@
 import matplotlib
 matplotlib.use('agg')
 import numpy as np
+import matplotlib.pyplot as plt
 import animatplot as amp
 from animatplot.testing import animation_compare
 
@@ -25,4 +26,43 @@ def test_Pcolormesh():
     Z = np.sin(X**2+Y**2-T)
 
     block = amp.blocks.Pcolormesh(X[:, :, 0], Y[:, :, 0], Z, t_axis=2)
+    return amp.Animation([block])
+
+
+@animation_compare(baseline_images='Blocks/Imshow', nframes=3)
+def test_Imshow():
+    x = np.linspace(0, 1, 10)
+    X, Y = np.meshgrid(x, x)
+
+    U = []
+    for i in range(3):
+        U.append(X**2+Y**2+i)
+
+    block = amp.blocks.Imshow(U)
+    return amp.Animation([block])
+
+
+@animation_compare(baseline_images='Blocks/Quiver', nframes=4)
+def test_Quiver():
+    x = np.linspace(0, 1, 10)
+    X, Y = np.meshgrid(x, x)
+
+    U, V = [], []
+    for i in range(4):
+        U.append(X**2+Y**2+i)
+        V.append(X**2+Y**2+i)
+
+    block = amp.blocks.Quiver(X, Y, U, V)
+    return amp.Animation([block])
+
+
+@animation_compare(baseline_images='Blocks/Nuke', nframes=3)
+def test_Nuke():
+    ax = plt.gca()
+    sizes = []
+
+    def animate(i):
+        sizes.append(i+1)
+        ax.pie(sizes)
+    block = amp.blocks.Nuke(animate, ax, 3)
     return amp.Animation([block])
