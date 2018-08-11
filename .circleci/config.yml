@@ -69,3 +69,4 @@ workflows:
   build:
     jobs:
       - docs-python35
+      - test-python36
