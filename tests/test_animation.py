@@ -1,13 +1,15 @@
+from matplotlib.testing import setup
+setup()
 import os
-import matplotlib
-matplotlib.use('agg')
+import pytest
 import numpy as np
-import animatplot as amp
 import matplotlib.pyplot as plt
 from matplotlib.animation import PillowWriter
+import animatplot as amp
 from animatplot.testing import animation_compare
 
 
+# @pytest.mark.xfail
 @animation_compare(baseline_images='Animation/controls', nframes=5)
 def test_controls():
     x = np.linspace(0, 1, 5)

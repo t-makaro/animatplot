@@ -1,5 +1,5 @@
-import matplotlib
-matplotlib.use('agg')
+from matplotlib.testing import setup
+setup()
 import numpy as np
 import matplotlib.pyplot as plt
 import animatplot as amp
