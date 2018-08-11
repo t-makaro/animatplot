@@ -9,7 +9,7 @@ import animatplot as amp
 from animatplot.testing import animation_compare
 
 
-@pytest.mark.xfail
+# @pytest.mark.xfail
 @animation_compare(baseline_images='Animation/controls', nframes=5)
 def test_controls():
     x = np.linspace(0, 1, 5)
