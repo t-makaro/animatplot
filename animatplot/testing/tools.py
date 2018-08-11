@@ -5,6 +5,7 @@ import pytest
 
 import matplotlib.pyplot as plt
 from matplotlib.animation import FileMovieWriter
+from matplotlib.testing import set_font_settings_for_testing
 from matplotlib.testing.compare import compare_images
 from matplotlib.testing.exceptions import ImageComparisonFailure
 
@@ -79,6 +80,7 @@ def animation_compare(baseline_images, nframes, format='.png', tol=1e-3):
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
+            set_font_settings_for_testing()
             anim = func(*args, **kwargs)
             try:
                 compare_animation(anim, baseline_images, format, nframes, tol)
