@@ -22,7 +22,7 @@ doc-run: &doc-build
 
 test-deps-run: &test-deps
   name: Install testing dependencies
-  command: python -m pip matplotlib>=2.2 pytest pytests-cov
+  command: python -m pip install matplotlib>=2.2 pytest pytests-cov
 
 tests-run: &test-run
   name: Run Pytest
