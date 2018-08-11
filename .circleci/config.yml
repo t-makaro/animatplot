@@ -24,7 +24,7 @@ test-deps-run: &test-deps
   name: Install testing dependencies
   command: |
     python -m pip install --user matplotlib>=2.2 pytest pytest-cov pillow
-    python -m pip install --user codecov
+    sudo pip install codecov
 
 tests-run: &test-run
   name: Run Pytest
