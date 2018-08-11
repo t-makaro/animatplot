@@ -20,6 +20,14 @@ doc-run: &doc-build
   command: make html
   working_directory: docs
 
+test-deps-run: &test-deps
+  name: Install testing dependencies
+  command: python -m pip matplotlib>=2.2 pytest pytests-cov
+
+tests-run: &test-run
+  name: Run Pytest
+  command: pytest --cov=animatplot
+
 jobs:
   docs-python35:
     docker:
@@ -38,6 +46,22 @@ jobs:
 
       - store_artifacts:
           path: docs/build/html
+  
+  test-python36:
+    docker:
+      - image: circleci/python:3.6
+    steps:
+      - run:
+          name: Add local binaries to path
+          command: echo 'export PATH=~/.local/bin/:$PATH' >> $BASH_ENV
+      
+      - checkout
+
+      - run: *test-deps
+      - run: *test-run
+
+      - store_artifacts:
+          path: tests/output_images
 
 
 workflows:
