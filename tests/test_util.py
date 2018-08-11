@@ -1,5 +1,6 @@
-import animatplot.util as util
+import pytest
 import numpy as np
+import animatplot.util as util
 
 
 def test_parametric_line():
@@ -22,6 +23,10 @@ def test_parametric_line():
 
     assert (X_valid[~mask] == X_test[~mask]).all()
     assert (Y_valid[~mask] == Y_test[~mask]).all()
+
+    with pytest.raises(ValueError):
+        y2 = np.arange(6)
+        util.parametric_line(x, y2)
 
 
 def test_demeshgrid():
