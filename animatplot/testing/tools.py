@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FileMovieWriter
 from matplotlib.testing import set_font_settings_for_testing
 from matplotlib.testing.compare import compare_images
+from matplotlib.testing.decorators import remove_ticks_and_titles
 from matplotlib.testing.exceptions import ImageComparisonFailure
 
 
@@ -76,12 +77,17 @@ def compare_animation(anim, expected, format_, nframes, tol):
                 '\t%(expected)s ' % err)
 
 
-def animation_compare(baseline_images, nframes, format='.png', tol=1e-3):
+def animation_compare(baseline_images, nframes, format='.png', tol=1e-3,
+                      remove_text=True):
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             set_font_settings_for_testing()
             anim = func(*args, **kwargs)
+            if remove_text:
+                fignum = plt.get_fignums()[0]
+                fig = plt.figure(fignum)
+                remove_ticks_and_titles(fig)
             try:
                 compare_animation(anim, baseline_images, format, nframes, tol)
             finally:
