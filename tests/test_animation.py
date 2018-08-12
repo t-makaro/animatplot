@@ -10,7 +10,7 @@ from animatplot.testing import animation_compare
 
 
 @pytest.mark.xfail
-@animation_compare(baseline_images='Animation/controls', nframes=5)
+@animation_compare(baseline_images='Animation/controls', nframes=5, tol=.5)
 def test_controls():
     x = np.linspace(0, 1, 5)
     y = np.sin(np.pi*x)
