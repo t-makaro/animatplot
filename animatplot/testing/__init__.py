@@ -1,1 +1,1 @@
-from .tools import BunchOFiles, compare_animation, animation_compare
+from .tools import BunchOFiles, animation_compare

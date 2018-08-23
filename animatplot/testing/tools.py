@@ -46,7 +46,7 @@ class BunchOFiles(FileMovieWriter):
         self._frame_sink().close()
 
 
-def compare_animation(anim, expected, format_, nframes, tol):
+def _compare_animation(anim, expected, format_, nframes, tol):
     # generate images from the animation
     base_dir, filename = split(join('tests', 'baseline_images', expected))
     out_dir = split(join('tests', 'output_images', expected))[0]
@@ -87,7 +87,7 @@ def animation_compare(baseline_images, nframes, format='.png', tol=1e-3,
                 fig = plt.figure(fignum)
                 remove_ticks_and_titles(fig)
             try:
-                compare_animation(anim, baseline_images, format, nframes, tol)
+                _compare_animation(anim, baseline_images, format, nframes, tol)
             finally:
                 plt.close('all')
         return wrapper
