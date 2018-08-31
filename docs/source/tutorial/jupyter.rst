@@ -10,3 +10,8 @@ use one of the following line magics:
     %matplotlib ipympl  # notebook or lab
     %matplotlib widget  # notebook or lab (equivalent to ipympl)
 
+Or if you prefer matplotlib to display a figure in a native window:
+
+.. code-block:: python
+
+    %matplotlib qt
