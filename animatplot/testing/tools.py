@@ -65,19 +65,16 @@ def _compare_animation(anim, expected, format_, nframes, tol):
                              in_decorator=True)
 
         if not os.path.exists(expected_name):
-            raise ImageComparisonFailure('image does not exist: %s'
-                                         % expected_name)
+            raise ImageComparisonFailure('image does not exist: %s' % expected_name)
 
         if err:
             for key in ["actual", "expected"]:
                 err[key] = os.path.relpath(err[key])
             raise ImageComparisonFailure(
-                'images not close (RMS %(rms).3f):\n\t%(actual)s\n'
-                '\t%(expected)s ' % err)
+                'images not close (RMS %(rms).3f):\n\t%(actual)s\n\t%(expected)s ' % err)
 
 
-def animation_compare(baseline_images, nframes, format='.png', tol=1e-3,
-                      remove_text=True):
+def animation_compare(baseline_images, nframes, fmt='.png', tol=1e-3, remove_text=True):
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -87,7 +84,7 @@ def animation_compare(baseline_images, nframes, format='.png', tol=1e-3,
                 fig = plt.figure(fignum)
                 remove_ticks_and_titles(fig)
             try:
-                _compare_animation(anim, baseline_images, format, nframes, tol)
+                _compare_animation(anim, baseline_images, fmt, nframes, tol)
             finally:
                 plt.close('all')
         return wrapper

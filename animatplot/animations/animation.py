@@ -34,8 +34,7 @@ class Animation:
         _len_time = len(self.timeline)
         for block in blocks:
             if len(block) != _len_time:
-                raise ValueError(
-                    "All blocks must animate for the same amount of time")
+                raise ValueError("All blocks must animate for the same amount of time")
 
         self.blocks = blocks
         self.fig = plt.gcf() if fig is None else fig
@@ -96,8 +95,7 @@ class Animation:
             self._pause ^= True
         self.button.on_clicked(pause)
 
-    def timeline_slider(self, text='Time', axis=None, valfmt='%1.2f',
-                        color=None):
+    def timeline_slider(self, text='Time', axis=None, valfmt='%1.2f', color=None):
         """Creates a timeline slider.
 
         Parameters
@@ -169,10 +167,7 @@ class Animation:
             the name of the file to be created without the file extension
         """
         self.timeline.index -= 1  # required for proper starting point for save
-        self.animation.save(
-            filename+'.gif',
-            writer=PillowWriter(fps=self.timeline.fps)
-        )
+        self.animation.save(filename+'.gif', writer=PillowWriter(fps=self.timeline.fps))
 
     def save(self, *args, **kwargs):
         """Saves an animation

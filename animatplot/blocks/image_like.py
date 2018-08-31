@@ -51,8 +51,7 @@ class Pcolormesh(Block):
         if self._arg_len == 1:
             self.quad = self.ax.pcolormesh(self.C[Slice], **kwargs)
         elif self._arg_len == 3:
-            self.quad = self.ax.pcolormesh(self.X, self.Y, self.C[Slice],
-                                           **kwargs)
+            self.quad = self.ax.pcolormesh(self.X, self.Y, self.C[Slice], **kwargs)
 
     def _update(self, i):
         Slice = self._make_pcolormesh_slice(i, 3)
