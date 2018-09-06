@@ -2,6 +2,7 @@ from matplotlib.animation import FuncAnimation, PillowWriter
 from matplotlib.widgets import Button, Slider
 import matplotlib.pyplot as plt
 from animatplot import Timeline
+from warnings import warn
 
 
 class Animation:
@@ -56,22 +57,27 @@ class Animation:
             interval=1000/self.timeline.fps
         )
 
-    def toggle(self, axis=None):
+    def toggle(self, ax=None, axis=None):
         """Creates a play/pause button to start/stop the animation
 
         Parameters
         ----------
-        axis : optional
-            A matplotlib axis to attach the button to.
+        ax : matplotlib.axes.Axes, optional
+            A matplotlib axes to attach the button to.
         """
-        if axis is None:
+        if axis is not None:
+            warn('axis has been replaced in favour of "ax", '
+                 'and will be removed in 0.4.0.')
+            ax = axis
+
+        if ax is None:
             adjust_plot = {'bottom': .2}
             rect = [.78, .03, .1, .07]
 
             plt.subplots_adjust(**adjust_plot)
             self.button_ax = plt.axes(rect)
         else:
-            self.button_ax = axis
+            self.button_ax = ax
 
         self.button = Button(self.button_ax, "Pause")
         self.button.label2 = self.button_ax.text(
@@ -95,29 +101,35 @@ class Animation:
             self._pause ^= True
         self.button.on_clicked(pause)
 
-    def timeline_slider(self, text='Time', axis=None, valfmt='%1.2f', color=None):
+    def timeline_slider(self, text='Time', ax=None, valfmt='%1.2f', color=None,
+                        axis=None):
         """Creates a timeline slider.
 
         Parameters
         ----------
         text : str, optional
             The text to display for the slider. Defaults to 'Time'
-        axis : optional
-            A matplotlib axis to attach the slider to
+        ax : matplotlib.axes.Axes, optional
+            A matplotlib axis to attach the slider to.
         valfmt : str, optional
             a format specifier used to print the time
             Defaults to '%1.2f'
         color :
             The color of the slider.
         """
-        if axis is None:
+        if axis is not None:
+            warn('axis has been replaced in favour of "ax", '
+                 'and will be removed in 0.4.0.')
+            ax = axis
+
+        if ax is None:
             adjust_plot = {'bottom': .2}
             rect = [.18, .05, .5, .03]
 
             plt.subplots_adjust(**adjust_plot)
             self.slider_ax = plt.axes(rect)
         else:
-            self.slider_ax = axis
+            self.slider_ax = ax
 
         if self.timeline.log:
             valfmt = '$10^{%s}$' % valfmt
