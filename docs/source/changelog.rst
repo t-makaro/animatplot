@@ -6,7 +6,10 @@ Changes to animatplot
 
 **Deprecations**
 
-- The ``axis`` keyword argument has been replaced in favour of ``ax``. ``axis`` refered to a ``matplotlib.axes.Axes`` which is plural because axes is composed of an x and a y axis, so the singular form made no sense. ``ax`` avoids this problem altogether, and is also consistent with Pandas' plotting wrapper.
+- The ``axis`` keyword argument has been replaced (everywhere) in favour of ``ax``, and ``axis`` will be removed completely in ``0.4.0``. This does not apply to ``t_axis`` which is unchanged.
+    Rational:
+    ``axis`` refered to a ``matplotlib.axes.Axes`` which is plural because axes is composed of an x and a y axis, so the singular form made no sense. 
+    ``ax`` avoids this problem altogether, and is also consistent with Pandas' plotting wrapper and the matplotlib convention of using ``ax``.
 
 **Features**
 
@@ -22,7 +25,7 @@ Changes to animatplot
 
 **Breaking Changes**
 
-- The ```text``` argument to timeline_slider is now the first positional argument. 
+- The ``text`` argument to timeline_slider is now the first positional argument. 
 
 0.2.2
 -----
