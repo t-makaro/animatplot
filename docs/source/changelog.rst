@@ -26,6 +26,7 @@ Changes to animatplot
 **Breaking Changes**
 
 - The ``text`` argument to timeline_slider is now the first positional argument. 
+- The order of positional arguments for the ``Nuke`` block has changed. This was required to give the ``ax`` argument a default.
 
 0.2.2
 -----
