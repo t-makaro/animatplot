@@ -4,13 +4,21 @@ import matplotlib.pyplot as plt
 class Block:
     """A base class for blocks
 
+    Parameters
+    ----------
+    ax : matplotlib.axes.Axes, optional
+        The matplotlib axes to attach the animation to.
+        Defaults to matplotlib.pyplot.gca()
+    t_axis : int, optional
+        The axis of the data that represents time.
+
     Attributes
     ----------
-    ax : matplotlib axis
-        The matplotlib axis that the animation is attached to.
+    ax : matplotlib.axes.Axes
+        The matplotlib axes that the block is attached to.
     """
-    def __init__(self, axis=None, t_axis=None):
-        self.ax = axis if axis is not None else plt.gca()
+    def __init__(self, ax=None, t_axis=None):
+        self.ax = ax if ax is not None else plt.gca()
         self.t_axis = t_axis
         self._is_list = False
 
