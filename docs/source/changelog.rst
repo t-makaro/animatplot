@@ -4,6 +4,10 @@ Changes to animatplot
 0.3.0
 -----
 
+**Deprecations**
+
+- The ``axis`` keyword argument has been replaced in favour of ``ax``. ``axis`` refered to a ``matplotlib.axes.Axes`` which is plural because axes is composed of an x and a y axis, so the singular form made no sense. ``ax`` avoids this problem altogether, and is also consistent with Pandas' plotting wrapper.
+
 **Features**
 
 - The Pcolormesh block now accepts 1D arrays (in addition to 2D) for x and y inputs.

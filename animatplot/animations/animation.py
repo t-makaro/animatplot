@@ -63,7 +63,7 @@ class Animation:
         Parameters
         ----------
         ax : matplotlib.axes.Axes, optional
-            A matplotlib axes to attach the button to.
+            The matplotlib axes to attach the button to.
         """
         if axis is not None:
             warn('axis has been replaced in favour of "ax", '
@@ -110,7 +110,7 @@ class Animation:
         text : str, optional
             The text to display for the slider. Defaults to 'Time'
         ax : matplotlib.axes.Axes, optional
-            A matplotlib axis to attach the slider to.
+            The matplotlib axes to attach the slider to.
         valfmt : str, optional
             a format specifier used to print the time
             Defaults to '%1.2f'

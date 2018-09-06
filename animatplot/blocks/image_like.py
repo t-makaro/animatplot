@@ -97,7 +97,7 @@ class Imshow(Block):
 
     Attributes
     ----------
-    ax : matplotlib axis
+    ax : matplotlib.axes.Axes
         The matplotlib axes that the block is attached to.
 
     Notes

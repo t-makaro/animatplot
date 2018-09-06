@@ -14,8 +14,8 @@ class Line(Block):
     y : list of 1D numpy arrays or a 2D numpy array
         The y data to be animated.
     ax : matplotlib.axes.Axes, optional
-        The axis to attach the block to. Defaults to
-        matplotlib.pyplot.gca()
+        The matplotlib axes to attach the block to.
+        Defaults to matplotlib.pyplot.gca()
     t_axis : int, optional
         The axis of the numpy array that represents time.
         Defaults to 0. No effect if x, y are lists of numpy arrays.
