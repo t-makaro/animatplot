@@ -33,7 +33,7 @@ class Pcolormesh(Block):
         axis = kwargs.pop('axis', None)
         if axis is not None:
             warn('axis has been replaced in favour of "ax",'
-                 'and will be removed in a future release.')
+                 'and will be removed in 0.4.0.')
             ax = axis
 
         if len(args) == 1:
@@ -109,7 +109,7 @@ class Imshow(Block):
         axis = kwargs.pop('axis', None)
         if axis is not None:
             warn('axis has been replaced in favour of "ax",'
-                 'and will be removed in a future release.')
+                 'and will be removed in 0.4.0.')
             ax = axis
 
         self.ims = np.asanyarray(images)

@@ -40,7 +40,7 @@ class Quiver(Block):
         axis = kwargs.pop('axis', None)
         if axis is not None:
             warn('axis has been replaced in favour of "ax",'
-                 'and will be removed in a future release.')
+                 'and will be removed in 0.4.0')
             ax = axis
 
         self.X = X
