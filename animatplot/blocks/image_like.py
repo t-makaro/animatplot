@@ -1,6 +1,7 @@
 from .base import Block
 import matplotlib.pyplot as plt
 import numpy as np
+from warnings import warn
 
 
 class Pcolormesh(Block):
@@ -11,8 +12,9 @@ class Pcolormesh(Block):
     X : 1D or 2D np.ndarray, optional
     Y : 1D or 2D np.ndarray, optional
     C : list of 2D np.ndarray or a 3D np.ndarray
-    axis : matplotlib axis, optional
-        an axis to attach the block to.
+    ax : matplotlib.axes.Axes, optional
+        The matplotlib axes to attach the block to.
+        Defaults to matplotlib.pyplot.gca()
     t_axis : int, optional
         The axis of the array that represents time. Defaults to 0.
         No effect if C is a list.
@@ -20,14 +22,20 @@ class Pcolormesh(Block):
     Attributes
     ----------
     ax : matplotlib axis
-        The matplotlib axis that the animation is attached to.
+        The matplotlib axes that the block is attached to.
 
     Notes
     -----
     All other keyword arguments get passed to ``axis.pcolormesh``
     see :meth:`matplotlib.axes.Axes.pcolormesh` for details.
     """
-    def __init__(self, *args, axis=None, t_axis=0, **kwargs):
+    def __init__(self, *args, ax=None, t_axis=0, **kwargs):
+        axis = kwargs.pop('axis', None)
+        if axis is not None:
+            warn('axis has been replaced in favour of "ax",'
+                 'and will be removed in a future release.')
+            ax = axis
+
         if len(args) == 1:
             self.C = args[0]
             self._arg_len = 1
@@ -42,7 +50,7 @@ class Pcolormesh(Block):
             raise TypeError(
                 'Illegal arguments to pcolormesh; see help(pcolormesh)')
 
-        super().__init__(axis, t_axis)
+        super().__init__(ax, t_axis)
 
         self._is_list = isinstance(self.C, list)
         self.C = np.asanyarray(self.C)
@@ -80,8 +88,9 @@ class Imshow(Block):
         Images is either a list of arrays of those shapes,
         or an array of shape (T,n,m), (T,n,m,3), or (T,n,m,4)
         where T is the length of the time axis (assuming ``t_axis=0``).
-    axis : matplotlib axis, optional
-        The axis to attach the block to
+    ax : matplotlib.axes.Axes, optional
+        The matplotlib axes to attach the block to.
+        Defaults to matplotlib.gca()
     t_axis : int, optional
         The axis of the array that represents time. Defaults to 0.
         No effect if images is a list.
@@ -89,16 +98,22 @@ class Imshow(Block):
     Attributes
     ----------
     ax : matplotlib axis
-        The matplotlib axis that the animation is attached to.
+        The matplotlib axes that the block is attached to.
 
     Notes
     -----
     This block accepts additional keyword arguments to be passed to
     :meth:`matplotlib.axes.Axes.imshow`
     """
-    def __init__(self, images, axis=None, t_axis=0, **kwargs):
+    def __init__(self, images, ax=None, t_axis=0, **kwargs):
+        axis = kwargs.pop('axis', None)
+        if axis is not None:
+            warn('axis has been replaced in favour of "ax",'
+                 'and will be removed in a future release.')
+            ax = axis
+
         self.ims = np.asanyarray(images)
-        super().__init__(axis, t_axis)
+        super().__init__(ax, t_axis)
 
         self._is_list = isinstance(images, list)
         self._dim = len(self.ims.shape)

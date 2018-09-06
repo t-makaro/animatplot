@@ -1,5 +1,6 @@
 from .base import Block
 import numpy as np
+from warnings import warn
 
 
 class Quiver(Block):
@@ -18,23 +19,30 @@ class Quiver(Block):
     V : 2D or 3D numpy array
         The V displcement of the arrows. 1 dimension
         higher than the X, Y arrays.
-    axis : matplotlib axis, optional
-        The axis to the block to
+    ax : matplotlib.axes.Axes, optional
+        The matplotlib axes to the block to.
+        Defaults to matplotlib.pyplot.gca()
     t_axis : int, optional
         The axis of the array that represents time. Defaults to 0.
         No effect if U, V are lists.
 
     Attributes
     ----------
-    ax : matplotlib axis
-        The matplotlib axis that the animation is attached to.
+    ax : matplotlib.axes.Axes
+        The matplotlib axes that the block is attached to.
 
     Notes
     -----
     This block accepts additional keyword arguments to be passed to
     :meth:`matplotlib.axes.Axes.quiver`
     """
-    def __init__(self, X, Y, U, V, axis=None, t_axis=0, **kwargs):
+    def __init__(self, X, Y, U, V, ax=None, t_axis=0, **kwargs):
+        axis = kwargs.pop('axis', None)
+        if axis is not None:
+            warn('axis has been replaced in favour of "ax",'
+                 'and will be removed in a future release.')
+            ax = axis
+
         self.X = X
         self.Y = Y
         self.U = np.asanyarray(U)
@@ -44,7 +52,7 @@ class Quiver(Block):
         if self.U.shape != self.V.shape:
             raise ValueError("U, V must have the same shape")
 
-        super().__init__(axis, t_axis)
+        super().__init__(ax, t_axis)
 
         self._dim = len(self.U.shape)
         self._is_list = isinstance(U, list)

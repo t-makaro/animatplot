@@ -1,6 +1,7 @@
 from .base import Block
 from animatplot.util import parametric_line
 import numpy as np
+from warnings import warn
 
 
 class Line(Block):
@@ -12,7 +13,7 @@ class Line(Block):
         The x data to be animated.
     y : list of 1D numpy arrays or a 2D numpy array
         The y data to be animated.
-    axis : matplotlib.axes.Axes, optional
+    ax : matplotlib.axes.Axes, optional
         The axis to attach the block to. Defaults to
         matplotlib.pyplot.gca()
     t_axis : int, optional
@@ -24,21 +25,27 @@ class Line(Block):
 
     Attributes
     ----------
-    ax : matplotlib axis
-        The matplotlib axis that the animation is attached to.
+    ax : matplotlib.axes.Axes
+        The matplotlib axes that the block is attached to.
 
     Notes
     -----
     This block accepts additional keyword arguments to be passed to
     :meth:`matplotlib.axes.Axes.plot`
     """
-    def __init__(self, x, y, axis=None, t_axis=0, **kwargs):
+    def __init__(self, x, y, ax=None, t_axis=0, **kwargs):
+        axis = kwargs.pop('axis', None)
+        if axis is not None:
+            warn('axis has been replaced in favour of "ax",'
+                 'and will be removed in a future release.')
+            ax = axis
+
         self.x = np.asanyarray(x)
         self.y = np.asanyarray(y)
         if self.x.shape != self.y.shape:
             raise ValueError("x, y must have the same shape"
                              "or be lists of the same length")
-        super().__init__(axis, t_axis)
+        super().__init__(ax, t_axis)
 
         self._is_list = (self.x.dtype == 'object')
         Slice = self._make_slice(0, 2)
@@ -65,13 +72,13 @@ class ParametricLine(Line):
     ----------
     x, y : 1D numpy array
         The data to be animated.
-    axis : matplotlib.axes.Axes
-        The axis to attach the block to.
+    ax : matplotlib.axes.Axes, optional
+        The matplotlib axes to attach the block to.
 
     Attributes
     ----------
-    ax : matplotlib axis
-        The matplotlib axis that the animation is attached to.
+    ax : matplotlib.axes.Axes
+        The matplotlib axes that the animation is attached to.
 
     Notes
     -----

@@ -1,13 +1,14 @@
 from .base import Block
+from warnings import warn
 
 
 class Nuke(Block):
     """For when the other blocks just won't do
 
-    The block will clear the axis and redraw using a provided
+    The block will clear the axes and redraw using a provided
     function on every frame.
     This block can be used with other blocks so long as other
-    blocks are attached to a different axis.
+    blocks are attached to a different axes.
 
     Only use this block as a last resort. Using the block
     is like nuking an ant hill. Hence the name.
@@ -17,7 +18,9 @@ class Nuke(Block):
     func : callable
         The first argument to this function must be an integer
         representing the frame number.
-    axis : a matplotlib axis, optional
+    ax : a matplotlib.axes.Axes, optional
+        The matplotlib axes to attach the block to.
+        Defaults to matplotlib.pyplot.gca()
     length : int
         the number of frames to display
     fargs : list, optional
@@ -25,14 +28,18 @@ class Nuke(Block):
 
     Attributes
     ----------
-    ax : matplotlib axis
-        The matplotlib axis that the animation is attached to.
+    ax : matplotlib.axes.Axes
+        The matplotlib axes that the block is attached to.
     """
-    def __init__(self, func, axis, length, fargs=[]):
+    def __init__(self, func, ax, length, fargs=[], axis=None):
+        if axis is not None:
+            warn('axis has been replaced in favour of "ax",'
+                 'and will be removed in a future release.')
+            ax = axis
         self.func = func
         self.length = length
         self.fargs = fargs
-        super().__init__(axis)
+        super().__init__(ax)
 
         func(0, *fargs)
 
