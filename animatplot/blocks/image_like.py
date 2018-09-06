@@ -32,7 +32,7 @@ class Pcolormesh(Block):
     def __init__(self, *args, ax=None, t_axis=0, **kwargs):
         axis = kwargs.pop('axis', None)
         if axis is not None:
-            warn('axis has been replaced in favour of "ax",'
+            warn('axis has been replaced in favour of "ax", '
                  'and will be removed in 0.4.0.')
             ax = axis
 
