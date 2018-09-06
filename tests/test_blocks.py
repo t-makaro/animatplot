@@ -64,5 +64,5 @@ def test_Nuke():
     def animate(i):
         sizes.append(i+1)
         ax.pie(sizes)
-    block = amp.blocks.Nuke(animate, ax, 3)
+    block = amp.blocks.Nuke(animate, ax=ax, length=3)
     return amp.Animation([block])
