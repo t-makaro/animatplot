@@ -13,7 +13,6 @@ deps-run: &doc-deps
   name: Install Python dependencies
   command: |
     python -m pip install --user -r requirements.txt
-    python setup.py install
   working_directory: docs
 
 doc-run: &doc-build
@@ -45,6 +44,9 @@ jobs:
 
       - run: *apt-install
       - run: *doc-deps
+      - run:
+          name: Setup.py
+          command: python setup.py install
       - run: *doc-build
 
       - store_artifacts:
