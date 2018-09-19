@@ -46,7 +46,7 @@ jobs:
       - run: *doc-deps
       - run:
           name: Setup.py
-          command: python setup.py install
+          command: pip install --user -e .
       - run: *doc-build
 
       - store_artifacts:
