@@ -48,6 +48,8 @@ jobs:
 
       - store_artifacts:
           path: docs/build/html
+      - store_artifacts:
+          path: docs/source
   
   test-python36:
     docker:
