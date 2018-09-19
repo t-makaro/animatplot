@@ -3,6 +3,7 @@ ipykernel
 nbsphinx
 matplotlib>=2.2
 sphinx_rtd_theme
+pillow
 #https://api.github.com/repos/sphinx-gallery/sphinx-gallery/zipball/master
 git+https://github.com/choldgraf/sphinx-gallery.git@scraper
 numpy
