@@ -52,15 +52,17 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
     'nbsphinx',
-    # 'sphinx_gallery.gen_gallery',
+    'sphinx_gallery.gen_gallery',
 ]
 
-# sphinx_gallery_conf = {
-#      # path to your examples scripts
-#      'examples_dirs': '../../examples',
-#      # path where to save gallery generated examples
-#      'gallery_dirs': 'auto_examples',
-# }
+
+sphinx_gallery_conf = {
+    # path to your examples scripts
+    'examples_dirs': '../../examples',
+    # path where to save gallery generated examples
+    'gallery_dirs': 'auto_examples',
+    'image_scrapers': ('image_files')
+}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
