@@ -25,6 +25,7 @@ test-deps-run: &test-deps
   command: |
     python -m pip install --user matplotlib>=2.2 pytest pytest-cov pillow
     sudo pip install codecov
+    python setup.py install
 
 tests-run: &test-run
   name: Run Pytest
