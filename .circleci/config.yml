@@ -13,6 +13,7 @@ deps-run: &doc-deps
   name: Install Python dependencies
   command: |
     python -m pip install --user -r requirements.txt
+    python setup.py install
   working_directory: docs
 
 doc-run: &doc-build
@@ -25,7 +26,6 @@ test-deps-run: &test-deps
   command: |
     python -m pip install --user matplotlib>=2.2 pytest pytest-cov pillow
     sudo pip install codecov
-    python setup.py install
 
 tests-run: &test-run
   name: Run Pytest
