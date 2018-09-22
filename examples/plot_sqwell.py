@@ -1,8 +1,6 @@
 """
 Square Well
 ===========
-
-.. image:: plot_sqwell.gif
 """
 import numpy as np
 import matplotlib.pyplot as plt
