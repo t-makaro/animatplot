@@ -99,3 +99,6 @@ ENV/
 
 # vscode reST doc preview
 _build
+
+# examples
+examples/*.gif

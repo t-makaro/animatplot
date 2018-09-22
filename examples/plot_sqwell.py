@@ -42,4 +42,5 @@ anim.timeline_slider()
 
 # anim.save('sq_well.mp4', writer=FFMpegWriter(fps=5))
 anim.save('plot_sqwell.gif', writer=PillowWriter(fps=5))
+# anim.animation.save('sq_well.gif', writer='imagemagick')
 plt.show()
