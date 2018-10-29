@@ -1,3 +1,5 @@
+.. _changelog:
+
 Changes to animatplot
 =====================
 
@@ -6,7 +8,7 @@ Changes to animatplot
 
 **Deprecations**
 
-- The ``axis`` keyword argument has been replaced (everywhere) in favour of ``ax``, and ``axis`` will be removed completely in ``0.4.0``. This does not apply to ``t_axis`` which is unchanged. See :ghpull:`10` for rational.
+- The ``axis`` keyword argument has been replaced (everywhere) in favour of ``ax``, and ``axis`` will be removed completely in ``0.4.0``. This does not apply to ``t_axis`` which is unchanged. See `#10 <https://github.com/t-makaro/animatplot/pull/10>`_ for rational.
 
 **Features**
 
