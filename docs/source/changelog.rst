@@ -6,16 +6,19 @@ Changes to animatplot
 
 **Deprecations**
 
-- The ``axis`` keyword argument has been replaced (everywhere) in favour of ``ax``, and ``axis`` will be removed completely in ``0.4.0``. This does not apply to ``t_axis`` which is unchanged.
-    Rational:
-    ``axis`` refered to a ``matplotlib.axes.Axes`` which is plural because axes is composed of an x and a y axis, so the singular form made no sense. 
-    ``ax`` avoids this problem altogether, and is also consistent with Pandas' plotting wrapper and the matplotlib convention of using ``ax``.
+- The ``axis`` keyword argument has been replaced (everywhere) in favour of ``ax``, and ``axis`` will be removed completely in ``0.4.0``. This does not apply to ``t_axis`` which is unchanged. See :ghpull:`10` for rational.
 
 **Features**
 
 - The Pcolormesh block now accepts 1D arrays (in addition to 2D) for x and y inputs.
 - Animation.timeline_slider now accepts a ``text`` argument to change the name of the slider.
-- New (and somewhat experimental) ``animations`` subpackage (well new to the public api). Contains some new convenice functions.
+- New blocks:
+
+    - ``Scatter`` for animating scatter plots. Capable of animating size and position of the points, but not yet the color.
+    - ``Updater`` a block that accepts a generic function that takes a frame number. Good if another block doesn't already exist for some tasks.
+
+- Composition Blocks: These are functions that return a list of blocks (and maybe a timeline). These are in the blocks subpackage and can be identified by the ``_comp`` suffix.
+- New (and very experimental) ``animations`` subpackage (well new to the public api). Contains some new convenice functions.
 
     - ``vector_plot`` wraps Pcolormesh and Quiver to produce animated vector fields.
 
@@ -27,6 +30,11 @@ Changes to animatplot
 
 - The ``text`` argument to timeline_slider is now the first positional argument. 
 - The order of positional arguments for the ``Nuke`` block has changed. This was required to give the ``ax`` argument a default.
+
+**Developer Changes**
+
+- New animation unittesting framework
+- Tests / doc building now runs on CircleCI.
 
 0.2.2
 -----
