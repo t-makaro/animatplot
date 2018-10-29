@@ -35,16 +35,42 @@ blocks
 Blocks handle the animation of different types of data.
 The following blocks are available in ``animatplot.blocks``.
 
+Data blocks
+~~~~~~~~~~~
+
+These blocks are built to animate data.
+
 .. currentmodule:: animatplot.blocks
 .. autosummary::
     :toctree: _as_gen/
 
-    Block
     Line
     Quiver
     Pcolormesh
     Imshow
+    Scatter
+
+Advanced Blocks
+~~~~~~~~~~~~~~~
+
+These blocks are for more advanced use. These allow you to write more custom code.
+
+.. autosummary::
+    :toctree: _as_gen/
+
+    Block
+    Update
     Nuke
+
+Composition Blocks
+~~~~~~~~~~~~~~~~~~
+
+These blocks are amalgamations of other blocks. These are actually functions that return lists of blocks.
+
+.. autosummary::
+    ::toctree: _as_gen/
+
+    vector_comp
 
 Animatplot.animations
 ---------------------

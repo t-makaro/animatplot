@@ -15,7 +15,7 @@ Changes to animatplot
 - New blocks:
 
     - ``Scatter`` for animating scatter plots. Capable of animating size and position of the points, but not yet the color.
-    - ``Updater`` a block that accepts a generic function that takes a frame number. Good if another block doesn't already exist for some tasks.
+    - ``Update`` a block that accepts a generic function that takes a frame number. Good if another block doesn't already exist for some tasks.
 
 - Composition Blocks: These are functions that return a list of blocks (and maybe a timeline). These are in the blocks subpackage and can be identified by the ``_comp`` suffix.
 - New (and very experimental) ``animations`` subpackage (well new to the public api). Contains some new convenice functions.

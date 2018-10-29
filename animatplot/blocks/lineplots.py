@@ -163,7 +163,8 @@ class Scatter(Block):
         data = np.vstack((x, y)).T
 
         self.scat.set_offsets(data)  # x, y
-        self.scat._sizes = self.s[s_slice]
+        if self._s_like_x:
+            self.scat._sizes = self.s[s_slice]
         # self.scat.set_array(x_vector, y_vector) # color
         return self.scat
 
