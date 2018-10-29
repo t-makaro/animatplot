@@ -53,7 +53,7 @@ These blocks are built to animate data.
 Advanced Blocks
 ~~~~~~~~~~~~~~~
 
-These blocks are for more advanced use. These allow you to write more custom code.
+These blocks are for more advanced use. These allow you to write more custom animations.
 
 .. autosummary::
     :toctree: _as_gen/
@@ -68,7 +68,7 @@ Composition Blocks
 These blocks are amalgamations of other blocks. These are actually functions that return lists of blocks.
 
 .. autosummary::
-    ::toctree: _as_gen/
+    :toctree: _as_gen/
 
     vector_comp
 
@@ -84,7 +84,7 @@ animatplot what to do, then dictionaries of parameters to pass to the underlying
 
 .. warning::
 
-    This subpackage may less API stable than the above (blocks/Animation/Timeline), 
+    This subpackage is less API stable than the above (blocks/Animation/Timeline), 
     and some of these functions may have different defaults.
 
 This submodule contains the following functions.
