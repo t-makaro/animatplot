@@ -1,3 +1,3 @@
 version = (0, 3, 0)
-info = '.dev1'
+info = ''
 __version__ = '.'.join(map(str, version))+info
