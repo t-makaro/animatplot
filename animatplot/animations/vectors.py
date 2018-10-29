@@ -1,10 +1,10 @@
-from .animation import Animation
+from ..animation import Animation
 from ..timeline import Timeline
-from .. import blocks
+from ..blocks import vector_comp
 import numpy as np
 
 
-def vector_plot(X, Y, U, V, t, skip=5, *, t_axis=2, units='', fps=10,
+def vector_plot(X, Y, U, V, t, skip=5, *, t_axis=0, units='', fps=10,
                 pcolor_kw={}, quiver_kw={}):
     """produces an animation of vector fields
 
@@ -33,7 +33,7 @@ def vector_plot(X, Y, U, V, t, skip=5, *, t_axis=2, units='', fps=10,
         Higher skip means fewer arrows. For best results, the skip should
         divide the length of the data-1. Defaults to 5.
     t_axis : int, optional
-        The axis of the U, V array's the represent time. Defaults to 2. Note
+        The axis of the U, V array's the represent time. Defaults to 0. Note
         this is different from the defaults that blocks choose. This default
         is chosen to be consistent with 3D-meshgrids (meshgrid(x, y, t)).
     fps : int, optional
@@ -56,24 +56,11 @@ def vector_plot(X, Y, U, V, t, skip=5, *, t_axis=2, units='', fps=10,
         The timeline that was generated for the animation.
     """
     # plot the magnitude of the vectors as a pcolormesh
-    magnitude = np.sqrt(U**2+V**2)
-    pcolor_block = blocks.Pcolormesh(X, Y, magnitude, t_axis=t_axis,
-                                     **pcolor_kw)
-
-    # use a subset of the data to plot the arrows as a quiver plot.
-    xy_slice = tuple([slice(None, None, skip)]*len(X.shape))
-
-    uv_slice = [slice(None, None, skip)]*len(U.shape)
-    uv_slice[t_axis] = slice(None)
-    uv_slice = tuple(uv_slice)
-
-    quiver_block = blocks.Quiver(X[xy_slice], Y[xy_slice],
-                                 U[uv_slice]/magnitude[uv_slice],
-                                 V[uv_slice]/magnitude[uv_slice],
-                                 t_axis=t_axis, **quiver_kw)
+    blocks = vector_comp(X, Y, U, V, skip, t_axis=t_axis,
+                         pcolor_kw=pcolor_kw, quiver_kw=quiver_kw)
 
     # create the animation
     timeline = Timeline(t, units=units, fps=fps)
-    anim = Animation([pcolor_block, quiver_block], timeline)
+    anim = Animation(blocks, timeline)
 
-    return anim, [pcolor_block, quiver_block], timeline
+    return anim, blocks, timeline
