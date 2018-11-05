@@ -1,6 +1,8 @@
 from matplotlib.animation import FuncAnimation, PillowWriter
 from matplotlib.widgets import Button, Slider
 import matplotlib.pyplot as plt
+import numpy as np
+
 from animatplot import Timeline
 
 
@@ -132,8 +134,11 @@ class Animation:
 
         def set_time(t):
             self.timeline.index = int(self.slider.val)
-            self.slider.valtext.set_text(
-                self.slider.valfmt % (self.timeline[self.timeline.index]))
+            if np.issubdtype(self.timeline.t.dtype, np.datetime64):
+                self.slider.valtext.set_text((self.timeline[self.timeline.index]))
+            else:
+                self.slider.valtext.set_text(
+                    self.slider.valfmt % (self.timeline[self.timeline.index]))
             if self._pause:
                 for block in self.blocks:
                     block._update(self.timeline.index)
