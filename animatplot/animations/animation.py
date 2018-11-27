@@ -97,7 +97,8 @@ class Animation:
             self._pause ^= True
         self.button.on_clicked(pause)
 
-    def timeline_slider(self, axis=None, valfmt='%1.2f', color=None):
+    def timeline_slider(self, axis=None, valfmt='%1.2f', color=None,
+                        time_label="Time"):
         """Creates a timeline slider.
 
         Parameters
@@ -109,6 +110,9 @@ class Animation:
             Defaults to '%1.2f'
         color :
             The color of the slider.
+        time_label : str, optional
+            Label to use for the time slider, default is "Time". Used for when
+            you're animating over a non-temporal dimension of your data.
         """
         if axis is None:
             adjust_plot = {'bottom': .2}
@@ -123,7 +127,7 @@ class Animation:
             valfmt = '$10^{%s}$' % valfmt
 
         self.slider = Slider(
-            self.slider_ax, "Time", 0, self.timeline._len-1,
+            self.slider_ax, time_label, 0, self.timeline._len-1,
             valinit=0,
             valfmt=(valfmt+self.timeline.units),
             valstep=1, color=color
