@@ -3,7 +3,7 @@ setup()
 import numpy as np
 import matplotlib.pyplot as plt
 import animatplot as amp
-from animatplot.testing import animation_compare
+from tests.tools import animation_compare
 
 
 @animation_compare(baseline_images='Blocks/Line', nframes=5)
