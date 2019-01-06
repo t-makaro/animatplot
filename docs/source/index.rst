@@ -8,6 +8,8 @@ animatplot
 
 **animatplot** is a library for producing interactive animated plots in python built on top of `matplotlib`_.
 
+.. image:: /_static/animatplot.gif
+
 **Contents**
 
 .. toctree::
