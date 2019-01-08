@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import PillowWriter
 import animatplot as amp
-from animatplot.testing import animation_compare
+from tests.tools import animation_compare
 
 
 @pytest.mark.xfail
