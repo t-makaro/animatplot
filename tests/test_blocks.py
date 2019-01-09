@@ -78,7 +78,9 @@ def test_Nuke():
 class TestTitleBlock:
     def test_list_of_str(self):
         labels = ['timestep 0', 'timestep 1']
-        assert labels == Title(labels).titles
+        result = Title(labels)
+        assert labels == result.titles
+        assert len(result) == 2
 
     def test_invalid_input(self):
         with pytest.raises(ValueError):
@@ -103,9 +105,8 @@ class TestTitleBlock:
         actual = Title('timestep {values:.2f}', values=[5e7]).titles
         assert actual == ['timestep 50000000.00']
 
-    # Hypothesis test this?
+    # Hypothesis test that the strings are always formatted correctly?
 
-    @pytest.mark.xfail
     def test_no_replacements(self):
         actual = Title('Name').titles
         assert actual == ['Name']
