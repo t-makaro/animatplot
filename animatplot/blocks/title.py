@@ -15,7 +15,7 @@ class Title(Block):
 
     Parameters
     ----------
-    title : str or list of str
+    text : str or list of str
         Text to display as the title.
         Either supplied as a list of strings, one for each timestep, or as a
         base string with curly braces for any "replacement fields".
@@ -35,7 +35,7 @@ class Title(Block):
         The matplotlib axes that the block is attached to.
     """
 
-    def __init__(self, title, ax=None, mpl_kwargs=None, *args, **kwargs):
+    def __init__(self, text, ax=None, mpl_kwargs=None, *args, **kwargs):
         axis = kwargs.pop('axis', None)
         if axis is not None:
             warn('axis has been replaced in favour of "ax", '
@@ -44,36 +44,48 @@ class Title(Block):
 
         super().__init__(ax)
 
-        if isinstance(title, str):
-            self._basetitle = title
+        if isinstance(text, str):
+            self._basetitle = text
 
             # Filter out only the keyword args which are things to be replaced
             # in the title text
-            # From https://stackoverflow.com/questions/25996937/
+            # Parsing trick from https://stackoverflow.com/questions/25996937/
             fieldnames = [fname for _, fname, _, _ in
-                          Formatter().parse(title) if fname]
+                          Formatter().parse(text) if fname]
             replacements = {key: value for key, value in kwargs.items()
                             if key in fieldnames}
 
-            # Select the values for the first frame
-            initial_replacements = {key: value[0] for key, value
-                                    in replacements.items()}
+            length = len(list(replacements.values())[0])
+            if not all(len(array) == length for array in replacements.values()):
+                raise ValueError("Not all arrays of replacement values are the"
+                                 " same length")
 
-            # Any leftovers are passed to .format
+            # Any leftover kwargs are to be passed to .format
             format_kwargs = {key: value for key, value in kwargs.items()
                             if key not in fieldnames}
 
-            self._titles = [self._basetitle.format(*args, **replacements,
-                                                   **format_kwargs)]
-            self.ax = ax.title(label=self.text, **mpl_kwargs)
+            titles = []
+            for i in range(length):
+                replacements_at_one_time = {replacement: array[i]
+                                            for replacement, array
+                                            in replacements.items()}
 
-        elif isinstance(title, list):
-            if not all(isinstance(text, str) for text in title):
+                title = self._basetitle.format(*args, **format_kwargs,
+                                               **replacements_at_one_time)
+                titles.append(title)
+            self.titles = titles
+
+        elif isinstance(text, list):
+            if not all(isinstance(x, str) for x in text):
                 # TODO ValueError or TypeError?
                 raise ValueError
-            self._titles = title
-            self.text = title[0]
+            self.titles = text
 
         else:
             raise ValueError("title must be either a string or a list of "
                              "strings")
+
+        # Select the title for the first frame
+        self.text = text[0]
+
+        #self.ax = ax.title(label=self.titles[0], **mpl_kwargs)
