@@ -35,12 +35,6 @@ class Title(Block):
     """
 
     def __init__(self, text, ax=None, mpl_kwargs=None, *args, **kwargs):
-        axis = kwargs.pop('axis', None)
-        if axis is not None:
-            warn('axis has been replaced in favour of "ax", '
-                 'and will be removed in 0.4.0.')
-            ax = axis
-
         super().__init__(ax)
 
         if isinstance(text, str):
