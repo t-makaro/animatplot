@@ -1,8 +1,6 @@
 from string import Formatter
 from warnings import warn
 
-import matplotlib.pyplot as plt
-
 from .base import Block
 
 
@@ -81,19 +79,24 @@ class Title(Block):
 
         elif isinstance(text, list):
             if not all(isinstance(x, str) for x in text):
-                # TODO ValueError or TypeError?
-                raise ValueError
+                raise TypeError("Not all the elements in the list given as "
+                                "argument text are strings")
             self._length = len(text)
             self.titles = text
 
         else:
-            raise ValueError("title must be either a string or a list of "
-                             "strings")
+            raise TypeError("argument text must be either a string or a list "
+                            "of strings")
 
-        # Select the title for the first frame
-        self.text = text[0]
+        # Draw the title for the first frame
+        if not mpl_kwargs:
+            mpl_kwargs = {}
+        self._mpl_kwargs = mpl_kwargs
+        self._update(0)
 
-        #self.ax = ax.title(label=self.titles[0], **mpl_kwargs)
+    def _update(self, i):
+        self.text = self.ax.set_title(label=self.titles[i], **self._mpl_kwargs)
+        return self.text
 
     def __len__(self):
         return self._length

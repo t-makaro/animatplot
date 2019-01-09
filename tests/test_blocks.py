@@ -7,9 +7,62 @@ import pytest
 import animatplot as amp
 from tests.tools import animation_compare
 
-from animatplot.blocks import Title
+from animatplot.blocks import Block, Title
 
 setup()
+
+
+class TestTitleBlock:
+    def test_list_of_str(self):
+        labels = ['timestep 0', 'timestep 1']
+        result = Title(labels)
+        assert labels == result.titles
+        assert len(result) == 2
+
+    def test_invalid_input(self):
+        with pytest.raises(TypeError):
+            Title(0)
+        with pytest.raises(TypeError):
+            Title([6, 7])
+
+    def test_format_str(self):
+        actual = Title('timestep {num}', num=[1, 2]).titles
+        assert actual == ['timestep 1', 'timestep 2']
+
+        actual = Title('timestep {num}', num=[1]).titles
+        assert actual == ['timestep 1']
+
+    def test_no_replacements(self):
+        actual = Title('Name').titles
+        assert actual == ['Name']
+
+    def test_multiple_replacements(self):
+        actual = Title('timestep {num}, max density {n}',
+                       num=[1, 2], n=[500, 10]).titles
+        expected = ['timestep {num}, max density {n}'.format(num=1, n=500),
+                    'timestep {num}, max density {n}'.format(num=2, n=10)]
+        assert actual == expected
+
+    def test_string_formatting(self):
+        actual = Title('timestep {values:.2f}', values=[5e7]).titles
+        assert actual == ['timestep 50000000.00']
+
+    # Hypothesis test that the strings are always formatted correctly?
+
+    @pytest.mark.skip
+    def test_text(self):
+        # TODO test that the right type of object is produced?
+        actual = Title('timestep {num}', num=[1, 2]).text
+
+    @pytest.mark.skip
+    def test_update(self):
+        ...
+
+    @pytest.mark.skip
+    def test_mpl_kwargs(self):
+        expected = {'loc': 'left', 'fontstyle': 'italic'}
+        actual = Title('timestep {num}', num=[1, 2], mpl_kwargs=expected)
+        assert actual._mpl_kwargs == expected
 
 
 @animation_compare(baseline_images='Blocks/Line', nframes=5)
@@ -74,43 +127,3 @@ def test_Nuke():
     block = amp.blocks.Nuke(animate, length=3, ax=ax)
     return amp.Animation([block])
 
-
-class TestTitleBlock:
-    def test_list_of_str(self):
-        labels = ['timestep 0', 'timestep 1']
-        result = Title(labels)
-        assert labels == result.titles
-        assert len(result) == 2
-
-    def test_invalid_input(self):
-        with pytest.raises(ValueError):
-            Title(0)
-        with pytest.raises(ValueError):
-            Title([6, 7])
-
-    def test_format_str(self):
-        actual = Title('timestep {num}', num=[1, 2]).titles
-        assert actual == ['timestep 1', 'timestep 2']
-
-        actual = Title('timestep {num}', num=[1]).titles
-        assert actual == ['timestep 1']
-
-        actual = Title('timestep {num}, max density {n}',
-                       num=[1, 2], n=[500, 10]).titles
-        expected = ['timestep {num}, max density {n}'.format(num=1, n=500),
-                    'timestep {num}, max density {n}'.format(num=2, n=10)]
-        assert actual == expected
-
-    def test_formatting(self):
-        actual = Title('timestep {values:.2f}', values=[5e7]).titles
-        assert actual == ['timestep 50000000.00']
-
-    # Hypothesis test that the strings are always formatted correctly?
-
-    def test_no_replacements(self):
-        actual = Title('Name').titles
-        assert actual == ['Name']
-
-    @pytest.mark.skip
-    def test_mpl_kwargs(self):
-        ...
