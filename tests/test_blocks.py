@@ -65,7 +65,7 @@ class TestTitleBlock:
 
     def test_mpl_kwargs(self):
         expected = {'loc': 'left', 'fontstyle': 'italic'}
-        actual = Title('timestep {num}', num=[1, 2], mpl_kwargs=expected)
+        actual = Title('timestep {num}', num=[1, 2], **expected)
         assert actual._mpl_kwargs == expected
 
 

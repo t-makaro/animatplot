@@ -34,7 +34,7 @@ class Title(Block):
         The matplotlib axes that the block is attached to.
     """
 
-    def __init__(self, text, ax=None, mpl_kwargs=None, *args, **kwargs):
+    def __init__(self, text, ax=None, *args, **kwargs):
         super().__init__(ax)
 
         if isinstance(text, str):
@@ -47,6 +47,14 @@ class Title(Block):
             replacements = {key: value for key, value in kwargs.items()
                             if key in fieldnames}
 
+            # Any leftover kwargs are assumed to be for matplotlib
+            mpl_kwargs = {kwarg: kwargs[kwarg] for kwarg in kwargs
+                          if kwarg not in fieldnames}
+            if mpl_kwargs:
+                self._mpl_kwargs = mpl_kwargs
+            else:
+                self._mpl_kwargs = {}
+
             if replacements:
                 self._length = len(list(replacements.values())[0])
                 if not all(len(array) == self._length for array
@@ -56,18 +64,13 @@ class Title(Block):
             else:
                 self._length = 1
 
-            # Any leftover kwargs are to be passed to .format
-            format_kwargs = {key: value for key, value in kwargs.items()
-                            if key not in fieldnames}
-
             titles = []
             for i in range(self._length):
                 replacements_at_one_time = {replacement: array[i]
                                             for replacement, array
                                             in replacements.items()}
 
-                title = text.format(*args, **format_kwargs,
-                                    **replacements_at_one_time)
+                title = text.format(*args, **replacements_at_one_time)
                 titles.append(title)
             self.titles = titles
 
@@ -77,15 +80,13 @@ class Title(Block):
                                 "argument text are strings")
             self._length = len(text)
             self.titles = text
+            self._mpl_kwargs = kwargs
 
         else:
             raise TypeError("argument text must be either a string or a list "
                             "of strings")
 
         # Draw the title for the first frame
-        if not mpl_kwargs:
-            mpl_kwargs = {}
-        self._mpl_kwargs = mpl_kwargs
         self._update(0)
 
     def _update(self, i):
