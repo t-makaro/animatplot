@@ -1,5 +1,4 @@
 from string import Formatter
-from warnings import warn
 
 from .base import Block
 
@@ -26,7 +25,8 @@ class Title(Block):
     args : optional
         Passed on to str.format()
     kwargs : optional
-        Passed on to str.format()
+        If kwarg matches a field in the format string, then passed on to
+        str.format(), else passed on to matplotlib.axes.Axes.set_title().
 
     Attributes
     ----------

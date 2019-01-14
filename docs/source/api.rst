@@ -9,7 +9,7 @@ Animatplot is build on top of three main classes:
 
 A ``Timeline`` holds the information and logic to actually control the timing of all animations.
 
-A ``Block`` represent any "thing" that is to be animated.
+A ``Block`` represents any "thing" that is to be animated.
 
 An ``Animation`` is a composition of a list of blocks and a timeline. This class builds the final animation.
 
@@ -50,6 +50,16 @@ These blocks are built to animate data.
     Imshow
     Scatter
 
+Graph Label Blocks
+~~~~~~~~~~~~~~~~~~
+
+These blocks are for animating non-data features on an axis.
+
+.. autosummary::
+    :toctree: _as_gen/
+
+    Title
+
 Advanced Blocks
 ~~~~~~~~~~~~~~~
 
@@ -75,8 +85,8 @@ These blocks are amalgamations of other blocks. These are actually functions tha
 Animatplot.animations
 ---------------------
 
-The animations subpackge is an opinionated subpackage that contains a number
-of convience functions for specific use cases. These functions wrap around different
+The animations subpackage is an opinionated subpackage that contains a number
+of convenience functions for specific use cases. These functions wrap around different
 combinations of blocks.
 
 In general, these functions will take some data to be animated, some parameters to tell 
