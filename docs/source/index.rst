@@ -20,6 +20,7 @@ animatplot
     tutorial/tutorial
     api
     gallery
+    auto_examples/index
 
 .. toctree::
     :maxdepth: 1

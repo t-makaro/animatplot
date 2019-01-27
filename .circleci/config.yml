@@ -44,10 +44,15 @@ jobs:
 
       - run: *apt-install
       - run: *doc-deps
+      - run:
+          name: Setup.py
+          command: pip install --user -e .
       - run: *doc-build
 
       - store_artifacts:
           path: docs/build/html
+      - store_artifacts:
+          path: docs/source
   
   test-python36:
     docker:
