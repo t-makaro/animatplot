@@ -8,8 +8,8 @@ class Timeline:
     Parameters
     ----------
     t : array_like
-            gets converted to a numpy array representing
-            the time at each frame of the animation
+        Gets converted to a numpy array representing
+        the time at each frame of the animation
     units : str, optional
         the units the time is measured in.
     fps : float, optional
@@ -43,7 +43,8 @@ class Timeline:
     def __repr__(self):
         time = repr(self.t)
         units = repr(self.units)
-        return "Timeline(t={}, units={}, fps={})".format(time, units, self.fps)
+        return "animatplot.animation.Timeline(t={}, units={}, fps={})"\
+            .format(time, units, self.fps)
 
     def __len__(self):
         return self._len
