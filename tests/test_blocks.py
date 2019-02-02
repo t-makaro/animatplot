@@ -1,6 +1,8 @@
 from matplotlib.testing import setup
 import numpy as np
+import numpy.testing as npt
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 
 import pytest
 
@@ -67,6 +69,106 @@ class TestTitleBlock:
         expected = {'loc': 'left', 'fontstyle': 'italic'}
         actual = Title('timestep {num}', num=[1, 2], mpl_kwargs=expected)
         assert actual._mpl_kwargs == expected
+
+
+class TestLineBlock:
+    def test_2d_inputs(self):
+        x = np.linspace(0, 1, 10)
+        t = np.linspace(0, 1, 5)
+        x_grid, t_grid = np.meshgrid(x, t)
+        y_data = np.sin(2 * np.pi * (x_grid + t_grid))
+
+        line_block = amp.blocks.Line(x_grid, y_data)
+
+        assert isinstance(line_block, amp.blocks.Line)
+        npt.assert_equal(line_block.x, x_grid)
+        npt.assert_equal(line_block.y, y_data)
+        assert len(line_block) == len(t)
+
+        assert isinstance(line_block.line, mpl.lines.Line2D)
+        xdata, ydata = line_block.line.get_data()
+        npt.assert_equal(xdata, x)
+        npt.assert_equal(ydata, y_data[0, :])
+
+    def test_update(self):
+        x = np.linspace(0, 1, 10)
+        t = np.linspace(0, 1, 5)
+        x_grid, t_grid = np.meshgrid(x, t)
+        y_data = np.sin(2 * np.pi * (x_grid + t_grid))
+
+        line_block = amp.blocks.Line(x_grid, y_data)
+        line_block._update(frame=1)
+
+        npt.assert_equal(line_block.line.get_xdata(), x)
+        npt.assert_equal(line_block.line.get_ydata(), y_data[1, :])
+
+    def test_constant_x(self):
+        x = np.linspace(0, 1, 10)
+        t = np.linspace(0, 1, 5)
+        x_grid, t_grid = np.meshgrid(x, t)
+        y_data = np.sin(2 * np.pi * (x_grid + t_grid))
+
+        line_block = amp.blocks.Line(y_data)
+
+        expected_x = np.arange(10)
+        npt.assert_equal(line_block.line.get_xdata(), expected_x)
+
+    def test_no_x_input(self):
+        x = np.linspace(0, 1, 10)
+        t = np.linspace(0, 1, 5)
+        x_grid, t_grid = np.meshgrid(x, t)
+        y_data = np.sin(2 * np.pi * (x_grid + t_grid))
+
+        line_block = amp.blocks.Line(y_data)
+
+        expected_x = np.arange(10)
+        npt.assert_equal(line_block.line.get_xdata(), expected_x)
+
+    def test_list_input(self):
+        x_data = [np.array([1, 2, 3]), np.array([1, 2, 3])]
+        y_data = [np.array([5, 6, 7]), np.array([4, 2, 9])]
+        line_block = amp.blocks.Line(x_data, y_data)
+        npt.assert_equal(line_block.y, np.array([[5, 6, 7], [4, 2, 9]]))
+        npt.assert_equal(line_block.x, np.array([[1, 2, 3], [1, 2, 3]]))
+
+    def test_bad_input(self):
+        # incorrect number of args
+        with pytest.raises(ValueError) as err:
+            amp.blocks.Line(1, 2, 3)
+        assert 'Invalid data arguments' in str(err.value)
+        with pytest.raises(ValueError) as err:
+            amp.blocks.Line()
+        assert 'Invalid data arguments' in str(err.value)
+
+        # No y data
+        with pytest.raises(ValueError) as err:
+            amp.blocks.Line(np.arange(5), None)
+        assert 'Must supply y data' in str(err.value)
+        with pytest.raises(ValueError) as err:
+            amp.blocks.Line(None)
+        assert 'Must supply y data' in str(err.value)
+
+        # y data not 2d
+        with pytest.raises(ValueError) as err:
+            amp.blocks.Line(np.arange(5), np.random.randn(5, 2, 2))
+        assert 'y data must be 2-dimensional' in str(err.value)
+
+        # 1d x doesn't match y
+        with pytest.raises(ValueError) as err:
+            amp.blocks.Line(np.arange(5), np.random.randn(4, 2))
+        assert 'dimensions of x must be compatible' in str(err.value)
+
+        # 2d x doesn't match y
+        with pytest.raises(ValueError) as err:
+            x = np.array([np.arange(5), np.arange(5)])
+            amp.blocks.Line(x, np.random.randn(4, 2), t_axis=1)
+        assert 'dimensions of x must be compatible' in str(err.value)
+
+    def test_kwarg_throughput(self):
+        x = np.array([np.arange(5), np.arange(5)])
+        line_block = amp.blocks.Line(x, np.random.randn(2, 5), t_axis=1,
+                                     alpha=0.5)
+        assert line_block.line.get_alpha() == 0.5
 
 
 class TestComparisons:

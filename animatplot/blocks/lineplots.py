@@ -1,16 +1,21 @@
+from warnings import warn
+import numpy as np
+
 from .base import Block
 from animatplot.util import parametric_line
-import numpy as np
-from warnings import warn
 
 
 class Line(Block):
-    """Animates lines
+    """
+    Animates a single line.
+
+    Accepts additional keyword arguments to be passed to
+    :meth:`matplotlib.axes.Axes.plot`.
 
     Parameters
     ----------
-    x : list of 1D numpy arrays or a 2D numpy array
-        The x data to be animated.
+    x : 1D numpy array, list of 1D numpy arrays or a 2D numpy array, optional
+        The x data to be animated. If 1D then will be constant over animation.
     y : list of 1D numpy arrays or a 2D numpy array
         The y data to be animated.
     ax : matplotlib.axes.Axes, optional
@@ -22,47 +27,91 @@ class Line(Block):
 
         The default is chosen to be consistent with:
             X, T = numpy.meshgrid(x, t)
+    **kwargs
+        Passed on to `matplotlib.axes.Axes.plot`.
 
     Attributes
     ----------
+    line: matplotlib.lines.Line2D
+
     ax : matplotlib.axes.Axes
         The matplotlib axes that the block is attached to.
 
     Notes
     -----
-    This block accepts additional keyword arguments to be passed to
-    :meth:`matplotlib.axes.Axes.plot`
+    This block animates a single line - to animate multiple lines you must call
+    this once for each line, and then animate all of the blocks returned by
+    passing a list of those blocks to `animatplot.animation.Animation`.
     """
-    def __init__(self, x, y, ax=None, t_axis=0, **kwargs):
+
+    def __init__(self, *args, ax=None, t_axis=0, **kwargs):
         axis = kwargs.pop('axis', None)
         if axis is not None:
             warn('axis has been replaced in favour of "ax", '
                  'and will be removed in 0.4.0.')
             ax = axis
 
-        self.x = np.asanyarray(x)
-        self.y = np.asanyarray(y)
-        if self.x.shape != self.y.shape:
-            raise ValueError("x, y must have the same shape"
-                             "or be lists of the same length")
         super().__init__(ax, t_axis)
 
-        self._is_list = (self.x.dtype == 'object')
-        Slice = self._make_slice(0, 2)
-        self.line, = self.ax.plot(self.x[Slice], self.y[Slice], **kwargs)
+        if len(args) == 1:
+            y = args[0]
+            x = None
+        elif len(args) == 2:
+            [x, y] = args
+        else:
+            raise ValueError("Invalid data arguments to Line block")
 
-    def _update(self, i):
-        Slice = self._make_slice(i, 2)
-        x_vector = self.x[Slice]
-        y_vector = self.y[Slice]
+        if y is None:
+            raise ValueError("Must supply y data to plot")
+        y = np.asanyarray(y)
+        if y.ndim != 2:
+            raise ValueError("y data must be 2-dimensional")
 
+        # x is optional
+        shape = list(y.shape)
+        shape.remove(y.shape[t_axis])
+        data_length, = shape
+        if x is None:
+            x = np.arange(data_length)
+        else:
+            x = np.asanyarray(x)
+
+        shape_mismatch = "The dimensions of x must be compatible with those " \
+                         "of y, but the shape of x is {} and the shape of y " \
+                         "is {}".format(x.shape, y.shape)
+        if x.ndim == 1:
+            # x is constant over time
+            if len(x) == data_length:
+                # Broadcast x to match y
+                x = np.expand_dims(x, axis=t_axis)
+                x = np.repeat(x, repeats=y.shape[t_axis], axis=t_axis)
+            else:
+                raise ValueError(shape_mismatch)
+        elif x.ndim == 2:
+            if x.shape != y.shape:
+                raise ValueError(shape_mismatch)
+        else:
+            raise ValueError("x, must be either 1- or 2-dimensional")
+
+        self.x = x
+        self.y = y
+
+        frame_slice = self._make_slice(i=0, dim=2)
+
+        x_first_frame_data = self.x[frame_slice]
+        y_first_frame_data = self.y[frame_slice]
+
+        self.line, = self.ax.plot(x_first_frame_data,
+                                  y_first_frame_data, **kwargs)
+
+    def _update(self, frame):
+        frame_slice = self._make_slice(frame, dim=2)
+        x_vector = self.x[frame_slice]
+        y_vector = self.y[frame_slice]
         self.line.set_data(x_vector, y_vector)
-        return self.line
 
     def __len__(self):
-        if self._is_list:
-            return self.x.shape[0]
-        return self.x.shape[self.t_axis]
+        return self.y.shape[self.t_axis]
 
 
 class ParametricLine(Line):
@@ -86,8 +135,8 @@ class ParametricLine(Line):
     :meth:`matplotlib.axes.Axes.plot`
     """
     def __init__(self, x, y, *args, **kwargs):
-        X, Y = parametric_line(x, y)
-        super().__init__(X, Y, *args, *kwargs)
+        x_grid, y_grid = parametric_line(x, y)
+        super().__init__(x_grid, y_grid, *args, *kwargs)
 
 
 class Scatter(Block):
