@@ -53,9 +53,6 @@ class Line(Block):
 
         super().__init__(ax, t_axis)
 
-        # TODO handle lists by instead just converting straight to ndarrays?
-        # TODO option for x being specified as an unvarying 1D array?
-
         if len(args) == 1:
             y = args[0]
             x = None
@@ -66,36 +63,40 @@ class Line(Block):
 
         if y is None:
             raise ValueError("Must supply y data to plot")
-        self.y = np.asanyarray(y)
+        y = np.asanyarray(y)
         if y.ndim != 2:
             raise ValueError("y data must be 2-dimensional")
 
         # x is optional
+        shape = list(y.shape)
+        shape.remove(y.shape[t_axis])
+        data_length, = shape
         if x is None:
-            x = np.arange(y.shape[t_axis])
+            x = np.arange(data_length)
         else:
             x = np.asanyarray(x)
 
-        # x might be constant over time
+        shape_mismatch = "The dimensions of x must be compatible with those " \
+                         "of y, but the shape of x is {} and the shape of y " \
+                         "is {}".format(x.shape, y.shape)
         if x.ndim == 1:
-            # TODO better way to specify "not time dimension"
-            if x.shape[0] == y.shape[t_axis-1]:
+            # x is constant over time
+            if len(x) == data_length:
                 # Broadcast x to match y
-                x = np.repeat(x[..., np.newaxis], repeats=y.shape[t_axis],
-                              axis=t_axis)
-
-        print(x.shape)
-        print(y.shape)
-        if x.shape != y.shape:
-            # TODO more informative error message
-            raise ValueError("x, y must have the same shape"
-                             "or be lists of the same length")
+                x = np.expand_dims(x, axis=t_axis)
+                x = np.repeat(x, repeats=y.shape[t_axis], axis=t_axis)
+            else:
+                raise ValueError(shape_mismatch)
+        elif x.ndim == 2:
+            if x.shape != y.shape:
+                raise ValueError(shape_mismatch)
+        else:
+            raise ValueError("x, must be either 1- or 2-dimensional")
 
         self.x = x
         self.y = y
 
-        self._is_list = isinstance(self.x, list)
-        frame_slice = self._make_slice(0, 2)
+        frame_slice = self._make_slice(i=0, dim=2)
 
         x_first_frame_data = self.x[frame_slice]
         y_first_frame_data = self.y[frame_slice]
@@ -110,9 +111,7 @@ class Line(Block):
         self.line.set_data(x_vector, y_vector)
 
     def __len__(self):
-        if self._is_list:
-            return self.x.shape[0]
-        return self.x.shape[self.t_axis]
+        return self.y.shape[self.t_axis]
 
 
 class ParametricLine(Line):
