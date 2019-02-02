@@ -1,14 +1,18 @@
 import pytest
 import numpy as np
-from numpy import arange, array
 from animatplot.timeline import Timeline
+
+# Needed for eval
+from numpy import array
+import animatplot
 
 
 def test_repr():
-    times = arange(0, 5, .5)
+    times = np.arange(0, 5, .5)
     t = Timeline(times)
 
-    representation = "Timeline(t=array([0. , 0.5, 1. , 1.5, 2. , 2.5, " \
+    representation = "animatplot.animation.Timeline(" \
+                     "t=array([0. , 0.5, 1. , 1.5, 2. , 2.5, " \
                      "3. , 3.5, 4. , 4.5]), units='', fps=10)"
     assert repr(t) == representation
     assert isinstance(eval(repr(t)), Timeline)
