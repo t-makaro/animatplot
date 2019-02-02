@@ -1,7 +1,6 @@
 from .base import Block
 from animatplot.util import parametric_line
 import numpy as np
-from warnings import warn
 
 
 class Line(Block):

@@ -1,7 +1,6 @@
 from .base import Block
 from .image_like import Pcolormesh
 import numpy as np
-from warnings import warn
 
 
 class Quiver(Block):
