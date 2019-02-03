@@ -1,7 +1,6 @@
 from .base import Block
 from animatplot.util import parametric_line
 import numpy as np
-from warnings import warn
 
 
 class Line(Block):
@@ -34,12 +33,6 @@ class Line(Block):
     :meth:`matplotlib.axes.Axes.plot`
     """
     def __init__(self, x, y, ax=None, t_axis=0, **kwargs):
-        axis = kwargs.pop('axis', None)
-        if axis is not None:
-            warn('axis has been replaced in favour of "ax", '
-                 'and will be removed in 0.4.0.')
-            ax = axis
-
         self.x = np.asanyarray(x)
         self.y = np.asanyarray(y)
         if self.x.shape != self.y.shape:

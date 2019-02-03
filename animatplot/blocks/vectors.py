@@ -1,7 +1,6 @@
 from .base import Block
 from .image_like import Pcolormesh
 import numpy as np
-from warnings import warn
 
 
 class Quiver(Block):
@@ -38,12 +37,6 @@ class Quiver(Block):
     :meth:`matplotlib.axes.Axes.quiver`
     """
     def __init__(self, X, Y, U, V, ax=None, t_axis=0, **kwargs):
-        axis = kwargs.pop('axis', None)
-        if axis is not None:
-            warn('axis has been replaced in favour of "ax", '
-                 'and will be removed in 0.4.0')
-            ax = axis
-
         self.X = X
         self.Y = Y
         self.U = np.asanyarray(U)

@@ -1,7 +1,6 @@
 from .base import Block
 import matplotlib.pyplot as plt
 import numpy as np
-from warnings import warn
 
 
 class Pcolormesh(Block):
@@ -30,12 +29,6 @@ class Pcolormesh(Block):
     see :meth:`matplotlib.axes.Axes.pcolormesh` for details.
     """
     def __init__(self, *args, ax=None, t_axis=0, **kwargs):
-        axis = kwargs.pop('axis', None)
-        if axis is not None:
-            warn('axis has been replaced in favour of "ax", '
-                 'and will be removed in 0.4.0.')
-            ax = axis
-
         if len(args) == 1:
             self.C = args[0]
             self._arg_len = 1
@@ -106,12 +99,6 @@ class Imshow(Block):
     :meth:`matplotlib.axes.Axes.imshow`
     """
     def __init__(self, images, ax=None, t_axis=0, **kwargs):
-        axis = kwargs.pop('axis', None)
-        if axis is not None:
-            warn('axis has been replaced in favour of "ax",'
-                 'and will be removed in 0.4.0.')
-            ax = axis
-
         self.ims = np.asanyarray(images)
         super().__init__(ax, t_axis)
 
