@@ -4,6 +4,10 @@
 #
 version: 2
 
+bin-path:  &bin-path
+  name: Add local binaries to path
+  command: echo 'export PATH=~/.local/bin/:$PATH' >> $BASH_ENV
+
 apt-run:  &apt-install
   name: Install apt packages
   command: |
@@ -36,9 +40,7 @@ jobs:
       - image: circleci/python:3.5
     steps:
 
-      - run:
-          name: Add local binaries to path
-          command: echo 'export PATH=~/.local/bin/:$PATH' >> $BASH_ENV
+      - run: *bin-path
 
       - checkout
 
@@ -53,9 +55,7 @@ jobs:
     docker:
       - image: circleci/python:3.6
     steps:
-      - run:
-          name: Add local binaries to path
-          command: echo 'export PATH=~/.local/bin/:$PATH' >> $BASH_ENV
+      - run: *bin-path
       
       - checkout
 
