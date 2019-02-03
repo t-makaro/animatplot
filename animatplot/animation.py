@@ -2,7 +2,6 @@ from matplotlib.animation import FuncAnimation, PillowWriter
 from matplotlib.widgets import Button, Slider
 import matplotlib.pyplot as plt
 from animatplot import Timeline
-from warnings import warn
 
 
 class Animation:
@@ -57,7 +56,7 @@ class Animation:
             interval=1000/self.timeline.fps
         )
 
-    def toggle(self, ax=None, axis=None):
+    def toggle(self, ax=None):
         """Creates a play/pause button to start/stop the animation
 
         Parameters
@@ -65,11 +64,6 @@ class Animation:
         ax : matplotlib.axes.Axes, optional
             The matplotlib axes to attach the button to.
         """
-        if axis is not None:
-            warn('axis has been replaced in favour of "ax", '
-                 'and will be removed in 0.4.0.')
-            ax = axis
-
         if ax is None:
             adjust_plot = {'bottom': .2}
             rect = [.78, .03, .1, .07]
@@ -101,8 +95,7 @@ class Animation:
             self._pause ^= True
         self.button.on_clicked(pause)
 
-    def timeline_slider(self, text='Time', ax=None, valfmt='%1.2f', color=None,
-                        axis=None):
+    def timeline_slider(self, text='Time', ax=None, valfmt='%1.2f', color=None):
         """Creates a timeline slider.
 
         Parameters
@@ -117,11 +110,6 @@ class Animation:
         color :
             The color of the slider.
         """
-        if axis is not None:
-            warn('axis has been replaced in favour of "ax", '
-                 'and will be removed in 0.4.0.')
-            ax = axis
-
         if ax is None:
             adjust_plot = {'bottom': .2}
             rect = [.18, .05, .5, .03]
