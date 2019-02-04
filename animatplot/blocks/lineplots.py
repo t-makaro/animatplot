@@ -1,4 +1,3 @@
-from warnings import warn
 import numpy as np
 
 from .base import Block
@@ -43,13 +42,7 @@ class Line(Block):
     this once for each line, and then animate all of the blocks returned by
     passing a list of those blocks to `animatplot.animation.Animation`.
     """
-
     def __init__(self, *args, ax=None, t_axis=0, **kwargs):
-        axis = kwargs.pop('axis', None)
-        if axis is not None:
-            warn('axis has been replaced in favour of "ax", '
-                 'and will be removed in 0.4.0.')
-            ax = axis
 
         super().__init__(ax, t_axis)
 
@@ -64,8 +57,11 @@ class Line(Block):
         if y is None:
             raise ValueError("Must supply y data to plot")
         y = np.asanyarray(y)
-        if y.ndim != 2:
-            raise ValueError("y data must be 2-dimensional")
+        if not all(len(l) == len(y[0]) for l in y):
+            raise NotImplementedError("Ragged array!")
+        else:
+            if y.ndim != 2:
+                raise ValueError("y data must be 2-dimensional")
 
         # x is optional
         shape = list(y.shape)

@@ -67,7 +67,7 @@ class TestTitleBlock:
 
     def test_mpl_kwargs(self):
         expected = {'loc': 'left', 'fontstyle': 'italic'}
-        actual = Title('timestep {num}', num=[1, 2], mpl_kwargs=expected)
+        actual = Title('timestep {num}', num=[1, 2], **expected)
         assert actual._mpl_kwargs == expected
 
 
@@ -108,10 +108,10 @@ class TestLineBlock:
         x_grid, t_grid = np.meshgrid(x, t)
         y_data = np.sin(2 * np.pi * (x_grid + t_grid))
 
-        line_block = amp.blocks.Line(y_data)
+        line_block = amp.blocks.Line(x, y_data)
 
-        expected_x = np.arange(10)
-        npt.assert_equal(line_block.line.get_xdata(), expected_x)
+        npt.assert_equal(line_block.line.get_xdata(), x)
+        npt.assert_equal(line_block.x[-1], x)
 
     def test_no_x_input(self):
         x = np.linspace(0, 1, 10)
@@ -130,6 +130,14 @@ class TestLineBlock:
         line_block = amp.blocks.Line(x_data, y_data)
         npt.assert_equal(line_block.y, np.array([[5, 6, 7], [4, 2, 9]]))
         npt.assert_equal(line_block.x, np.array([[1, 2, 3], [1, 2, 3]]))
+
+    @pytest.mark.xfail
+    def test_ragged_list_input(self):
+        x_data = [np.array([1, 2, 3]), np.array([1, 2, 3, 4])]
+        y_data = [np.array([5, 6, 7]), np.array([4, 2, 9, 10])]
+        line_block = amp.blocks.Line(x_data, y_data)
+        npt.assert_equal(line_block.y, x_data)
+        npt.assert_equal(line_block.x, y_data)
 
     def test_bad_input(self):
         # incorrect number of args

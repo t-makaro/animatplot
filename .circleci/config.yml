@@ -4,7 +4,12 @@
 #
 version: 2
 
-apt-run:  &apt-install
+bin-path: &bin-path
+  name: Add local binaries to path
+  command: echo 'export PATH=~/.local/bin/:$PATH' >> $BASH_ENV
+
+# documentation build
+apt-run: &apt-install
   name: Install apt packages
   command: |
     sudo apt-get install -y pandoc
@@ -20,6 +25,7 @@ doc-run: &doc-build
   command: make html
   working_directory: docs
 
+# Testing
 test-deps-run: &test-deps
   name: Install testing dependencies
   command: |
@@ -30,35 +36,29 @@ tests-run: &test-run
   name: Run Pytest
   command: python -m pytest tests/ --cov
 
+
 jobs:
   docs-python35:
     docker:
       - image: circleci/python:3.5
     steps:
-
-      - run:
-          name: Add local binaries to path
-          command: echo 'export PATH=~/.local/bin/:$PATH' >> $BASH_ENV
-
       - checkout
 
+      - run: *bin-path
       - run: *apt-install
       - run: *doc-deps
       - run: *doc-build
 
       - store_artifacts:
           path: docs/build/html
-  
+
   test-python36:
     docker:
       - image: circleci/python:3.6
     steps:
-      - run:
-          name: Add local binaries to path
-          command: echo 'export PATH=~/.local/bin/:$PATH' >> $BASH_ENV
-      
       - checkout
 
+      - run: *bin-path
       - run: *test-deps
       - run: *test-run
 
