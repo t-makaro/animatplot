@@ -57,8 +57,11 @@ class Line(Block):
         if y is None:
             raise ValueError("Must supply y data to plot")
         y = np.asanyarray(y)
-        if y.ndim != 2:
-            raise ValueError("y data must be 2-dimensional")
+        if not all(len(l) == len(y[0]) for l in y):
+            raise NotImplementedError("Ragged array!")
+        else:
+            if y.ndim != 2:
+                raise ValueError("y data must be 2-dimensional")
 
         # x is optional
         shape = list(y.shape)
