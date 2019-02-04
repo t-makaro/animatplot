@@ -57,10 +57,8 @@ class Line(Block):
         if y is None:
             raise ValueError("Must supply y data to plot")
         y = np.asanyarray(y)
-        print(str(y.dtype))
         if str(y.dtype) == 'object':
             # ragged array
-            print("ragged array!")
             if x is None:
                 raise ValueError("Must specify x data explicitly when passing"
                                  "a ragged array for y data")
