@@ -108,7 +108,7 @@ class Animation:
             The matplotlib axes to attach the slider to.
         valfmt : str, optional
             a format specifier used to print the time
-            Defaults to '%1.2f'
+            Defaults to '%s' for datetime64, timedelta64 and '%1.2f' otherwise.
         color :
             The color of the slider.
         """
@@ -122,7 +122,8 @@ class Animation:
             self.slider_ax = ax
 
         if valfmt is None:
-            if np.issubdtype(self.timeline.t.dtype, np.datetime64):
+            if (np.issubdtype(self.timeline.t.dtype, np.datetime64)
+                or np.issubdtype(self.timeline.t.dtype, np.timedelta64)):
                 valfmt = '%s'
             else:
                 valfmt = '%1.2f'
