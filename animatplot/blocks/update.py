@@ -1,5 +1,4 @@
 from .base import Block
-from warnings import warn
 
 
 class Update(Block):
