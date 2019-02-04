@@ -97,7 +97,7 @@ class Animation:
             self._pause ^= True
         self.button.on_clicked(pause)
 
-    def timeline_slider(self, text='Time', ax=None, valfmt='%1.2f', color=None):
+    def timeline_slider(self, text='Time', ax=None, valfmt=None, color=None):
         """Creates a timeline slider.
 
         Parameters
@@ -121,6 +121,12 @@ class Animation:
         else:
             self.slider_ax = ax
 
+        if valfmt is None:
+            if np.issubdtype(self.timeline.t.dtype, np.datetime64):
+                valfmt = '%s'
+            else:
+                valfmt = '%1.2f'
+
         if self.timeline.log:
             valfmt = '$10^{%s}$' % valfmt
 
@@ -134,11 +140,8 @@ class Animation:
 
         def set_time(t):
             self.timeline.index = int(self.slider.val)
-            if np.issubdtype(self.timeline.t.dtype, np.datetime64):
-                self.slider.valtext.set_text((self.timeline[self.timeline.index]))
-            else:
-                self.slider.valtext.set_text(
-                    self.slider.valfmt % (self.timeline[self.timeline.index]))
+            self.slider.valtext.set_text(
+                self.slider.valfmt % (self.timeline[self.timeline.index]))
             if self._pause:
                 for block in self.blocks:
                     block._update(self.timeline.index)
