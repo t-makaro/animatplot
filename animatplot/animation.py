@@ -123,7 +123,7 @@ class Animation:
 
         if valfmt is None:
             if (np.issubdtype(self.timeline.t.dtype, np.datetime64)
-                or np.issubdtype(self.timeline.t.dtype, np.timedelta64)):
+               or np.issubdtype(self.timeline.t.dtype, np.timedelta64)):
                 valfmt = '%s'
             else:
                 valfmt = '%1.2f'
