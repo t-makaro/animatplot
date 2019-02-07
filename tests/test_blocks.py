@@ -71,6 +71,11 @@ class TestTitleBlock:
         assert actual._mpl_kwargs == expected
 
 
+def assert_jagged_arrays_equal(x, y):
+    for x, y in zip(x, y):
+        npt.assert_equal(x, y)
+
+
 class TestLineBlock:
     def test_2d_inputs(self):
         x = np.linspace(0, 1, 10)
@@ -131,13 +136,26 @@ class TestLineBlock:
         npt.assert_equal(line_block.y, np.array([[5, 6, 7], [4, 2, 9]]))
         npt.assert_equal(line_block.x, np.array([[1, 2, 3], [1, 2, 3]]))
 
-    @pytest.mark.xfail
     def test_ragged_list_input(self):
         x_data = [np.array([1, 2, 3]), np.array([1, 2, 3, 4])]
         y_data = [np.array([5, 6, 7]), np.array([4, 2, 9, 10])]
+
+        with pytest.raises(ValueError) as err:
+            line_block = amp.blocks.Line(y_data)
+        assert "Must specify x data explicitly" in str(err)
+
         line_block = amp.blocks.Line(x_data, y_data)
-        npt.assert_equal(line_block.y, x_data)
-        npt.assert_equal(line_block.x, y_data)
+
+        assert_jagged_arrays_equal(line_block.x, np.array(x_data))
+        assert_jagged_arrays_equal(line_block.y, np.array(y_data))
+
+    def test_bad_ragged_list_input(self):
+        x_data = np.array([np.array([1, 2, 3]), np.array([1, 2, 3, 4])])
+        y_data = np.array([np.array([5, 6, 7]), np.array([4, 2, 9, 10, 11])])
+
+        with pytest.raises(ValueError) as err:
+            line_block = amp.blocks.Line(x_data, y_data)
+        assert "x & y data must match" in str(err)
 
     def test_bad_input(self):
         # incorrect number of args

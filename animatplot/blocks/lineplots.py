@@ -40,7 +40,7 @@ class Line(Block):
     -----
     This block animates a single line - to animate multiple lines you must call
     this once for each line, and then animate all of the blocks returned by
-    passing a list of those blocks to `animatplot.animation.Animation`.
+    passing a list of those blocks to `animatplot.Animation`.
     """
     def __init__(self, *args, ax=None, t_axis=0, **kwargs):
 
@@ -57,37 +57,52 @@ class Line(Block):
         if y is None:
             raise ValueError("Must supply y data to plot")
         y = np.asanyarray(y)
-        if not all(len(l) == len(y[0]) for l in y):
-            raise NotImplementedError("Ragged array!")
+        if str(y.dtype) == 'object':
+            self.t_axis = 0
+
+            # ragged array
+            if x is None:
+                raise ValueError("Must specify x data explicitly when passing"
+                                 "a ragged array for y data")
+
+            x = np.asanyarray(x)
+
+            if not all(len(xline) == len(yline) for xline, yline in zip(x, y)):
+                raise ValueError("Length of x & y data must match one another "
+                                 "for every frame")
+
+            self._is_list = True
+
         else:
+            # Rectangular data
             if y.ndim != 2:
                 raise ValueError("y data must be 2-dimensional")
 
-        # x is optional
-        shape = list(y.shape)
-        shape.remove(y.shape[t_axis])
-        data_length, = shape
-        if x is None:
-            x = np.arange(data_length)
-        else:
-            x = np.asanyarray(x)
-
-        shape_mismatch = "The dimensions of x must be compatible with those " \
-                         "of y, but the shape of x is {} and the shape of y " \
-                         "is {}".format(x.shape, y.shape)
-        if x.ndim == 1:
-            # x is constant over time
-            if len(x) == data_length:
-                # Broadcast x to match y
-                x = np.expand_dims(x, axis=t_axis)
-                x = np.repeat(x, repeats=y.shape[t_axis], axis=t_axis)
+            # x is optional
+            shape = list(y.shape)
+            shape.remove(y.shape[t_axis])
+            data_length, = shape
+            if x is None:
+                x = np.arange(data_length)
             else:
-                raise ValueError(shape_mismatch)
-        elif x.ndim == 2:
-            if x.shape != y.shape:
-                raise ValueError(shape_mismatch)
-        else:
-            raise ValueError("x, must be either 1- or 2-dimensional")
+                x = np.asanyarray(x)
+
+            shape_mismatch = "The dimensions of x must be compatible with " \
+                             "those of y, but the shape of x is {} and the " \
+                             "shape of y is {}".format(x.shape, y.shape)
+            if x.ndim == 1:
+                # x is constant over time
+                if len(x) == data_length:
+                    # Broadcast x to match y
+                    x = np.expand_dims(x, axis=t_axis)
+                    x = np.repeat(x, repeats=y.shape[t_axis], axis=t_axis)
+                else:
+                    raise ValueError(shape_mismatch)
+            elif x.ndim == 2:
+                if x.shape != y.shape:
+                    raise ValueError(shape_mismatch)
+            else:
+                raise ValueError("x, must be either 1- or 2-dimensional")
 
         self.x = x
         self.y = y
