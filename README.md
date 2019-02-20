@@ -11,6 +11,11 @@ A python package for making interactive animated plots build on matplotlib.
 pip install animatplot
 ```
 
+or using conda
+```bash
+conda install animatplot -c conda-forge
+```
+
 ## Documentation
 Documentation can be found [here](https://animatplot.readthedocs.io/en/latest/index.html)
 
