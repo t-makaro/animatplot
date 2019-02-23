@@ -26,9 +26,9 @@ Changes to animatplot
 
 **Authors**
 
-- @t-makaro
-- @TomNicholas*
-- @dcherian*
+- `@t-makaro <https://github.com/t-makaro>`_
+- `@TomNicholas* <https://github.com/TomNicholas>`_
+- `@dcherian* <https://github.com/dcherian>`_
 
 \* indicates new author in this release.
 
