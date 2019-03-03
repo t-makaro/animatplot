@@ -1,5 +1,5 @@
 build:
-  image: 3
+  image: 3.0
 
 python:
   version: 3.6
