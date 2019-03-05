@@ -60,7 +60,7 @@ class Pcolormesh(Block):
         return self.quad
 
     def __len__(self):
-        return self.C.shape[2]
+        return self.C.shape[self.t_axis]
 
     def _make_pcolormesh_slice(self, i, dim):
         if self._is_list:
