@@ -8,12 +8,13 @@ class Timeline:
     Parameters
     ----------
     t : array_like
-        Gets converted to a numpy array representing
-        the time at each frame of the animation
+        Gets converted into a numpy array representing
+        the time at each frame of the animation.
     units : str, optional
-        the units the time is measured in.
+        The units in which the time is measured.
     fps : float, optional
-        indicates the number of frames per second to play
+        Indicates the number of frames per second of the animation.
+        Defaults to 10.
     log : bool, optional
         Displays the time scale logarithmically (base 10). Defaults to False.
     """
