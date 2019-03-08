@@ -15,17 +15,17 @@ class Update(Block):
         representing the frame number. It should return a matplotlib
         artist.
     length : int
-        the number of frames to display
+        The number of frames to display.
     fargs : list, optional
-        a list of arguments to pass into func
-    ax : a matplotlib.axes.Axes, optional
-        The matplotlib axes to attach the block to.
+        A list of arguments to pass into func.
+    ax : matplotlib.axes.Axes, optional
+        The matplotlib axes to which the block is attached.
         Defaults to matplotlib.pyplot.gca()
 
     Attributes
     ----------
     ax : matplotlib.axes.Axes
-        The matplotlib axes that the block is attached to.
+        The matplotlib axes to which the block is attached.
     """
     def __init__(self, func, length, fargs=[], ax=None):
         self.func = func
@@ -43,7 +43,7 @@ class Update(Block):
 
 
 class Nuke(Update):
-    """For when the other blocks just won't do
+    """For when the other blocks just won't do:
 
     This block will clear the axes and redraw using a provided
     function on every frame.
@@ -59,17 +59,17 @@ class Nuke(Update):
         The first argument to this function must be an integer
         representing the frame number.
     length : int
-        the number of frames to display
+        The number of frames to display.
     fargs : list, optional
-        a list of arguments to pass into func
-    ax : a matplotlib.axes.Axes, optional
-        The matplotlib axes to attach the block to.
+        A list of arguments to pass into func.
+    ax : matplotlib.axes.Axes, optional
+        The matplotlib axes to which the block is attached.
         Defaults to matplotlib.pyplot.gca()
 
     Attributes
     ----------
     ax : matplotlib.axes.Axes
-        The matplotlib axes that the block is attached to.
+        The matplotlib axes to which the block is attached.
     """
     def _update(self, i):
         self.ax.clear()
