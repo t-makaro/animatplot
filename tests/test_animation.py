@@ -5,6 +5,8 @@ import pytest
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import PillowWriter
+import numpy.testing as npt
+
 import animatplot as amp
 from tests.tools import animation_compare
 
@@ -41,3 +43,40 @@ def test_save():
     anim.save_gif(base+'save')
     plt.close('all')
     assert os.path.exists(base+'save.gif')
+
+
+@pytest.fixture()
+def line_block():
+    def make_line_block(t_length=5):
+        x = np.linspace(0, 1, 10)
+        t = np.linspace(0, 1, t_length)
+        x_grid, t_grid = np.meshgrid(x, t)
+        y_data = np.sin(2 * np.pi * (x_grid + t_grid))
+
+        return amp.blocks.Line(x, y_data)
+    return make_line_block
+
+
+class TestAdd:
+    def test_add_blocks(self, line_block):
+        anim = amp.Animation([line_block()])
+        anim2 = anim.add(line_block())
+
+        assert isinstance(anim2, amp.Animation)
+        assert len(anim2.blocks) == 2
+        for actual in anim2.blocks:
+            assert len(actual) == 5
+            npt.assert_equal(actual.line.get_xdata(),
+                             np.linspace(0, 1, 10))
+
+    def test_wrong_length_block(self, line_block):
+        anim = amp.Animation([line_block()])
+
+        with pytest.raises(ValueError):
+            anim.add(line_block(t_length=6))
+
+    def test_wrong_type(self, line_block):
+        anim = amp.Animation([line_block()])
+
+        with pytest.raises(TypeError):
+            anim.add('not a block')
