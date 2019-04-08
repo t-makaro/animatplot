@@ -36,25 +36,14 @@ class Animation:
 
         self.fig = plt.gcf() if fig is None else fig
 
-        self.animation = self._animate(blocks)
+        self.animation = self._animate(blocks, self.timeline)
 
-    def _animate(self, blocks):
-        """
-
-        Parameters
-        ----------
-        blocks
-
-        Returns
-        -------
-
-        """
-        _len_time = len(self.timeline)
+    def _animate(self, blocks, timeline):
+        _len_time = len(timeline)
         for block in blocks:
             if len(block) != _len_time:
-                print(len(block))
-                raise ValueError(
-                    "All blocks must animate for the same amount of time")
+                raise ValueError("All blocks must animate for the same amount "
+                                 "of time")
 
         self.blocks = blocks
         self._has_slider = False
@@ -205,27 +194,35 @@ class Animation:
         """
         Updates the animation object by adding additional blocks.
 
+        The new blocks can be passed as a list, or as part of a second animaion.
+        If passed as part of a new animation, the timeline of this new
+        animation object will replace the old one.
+
         Parameters
         ----------
-        new : animatplot.animation, or list of animatplot.block.Block objects
+        new : amp.animation.Animation, or list of amp.block.Block objects
             Either blocks to add to animation instance, or another animation
             instance whose blocks should be combined with this animation.
         """
 
         if isinstance(new, Animation):
-            raise NotImplementedError("Cannot append to animation instances yet")
+            new_blocks = new.blocks
+            new_timeline = new.timeline
 
         else:
             if not isinstance(new, list):
-                new = [new]
+                new_blocks = [new]
+            else:
+                new_blocks = new
+            new_timeline = self.timeline
 
-            for i, block in enumerate(new):
-                if not isinstance(block, Block):
-                    err = f"Block number {i} passed is of type {type(block)}, " \
-                          f" not of type animatplot.blocks.Block (or a subclass)."
-                    raise TypeError(err)
+        for i, block in enumerate(new_blocks):
+            if not isinstance(block, Block):
+                raise TypeError(f"Block number {i} passed is of type "
+                                f"{type(block)}, not of type "
+                                f"animatplot.blocks.Block (or a subclass)")
 
-                self.blocks.append(block)
+            self.blocks.append(block)
 
-            self.animation = self._animate(self.blocks)
-            return self
+        self.animation = self._animate(self.blocks, new_timeline)
+        return self
