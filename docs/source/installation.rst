@@ -1,6 +1,10 @@
 Installation
 ============
 
+Using conda::
+
+    conda install animatplot -c conda-forge
+
 Using pip::
 
     pip install animatplot

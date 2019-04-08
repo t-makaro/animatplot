@@ -3,6 +3,35 @@
 Changes to animatplot
 =====================
 
+0.4.0
+-----
+
+**Features**
+
+- New Title block. `#27 <https://github.com/t-makaro/animatplot/pull/27>`_
+- x values are now optional in the Line Block. `#29 <https://github.com/t-makaro/animatplot/pull/29/>`_
+
+**Bug Fixes**
+
+- Timeline slider now formats ``np.datetime`` properly by default. `#21 <https://github.com/t-makaro/animatplot/pull/21>`_
+
+**Breaking Changes**
+
+- The x, y inputs to the Line Block are not positional only. `#29 <https://github.com/t-makaro/animatplot/pull/29/>`_
+- Removed axis kwargs that deprecated in favor of ax in 0.3.0. `#31 <https://github.com/t-makaro/animatplot/pull/31/>`_
+
+**Developer Changes**
+
+- Testing tools were moving into the tests folder and are no longer a subpackage of animatplot. `#26 <https://github.com/t-makaro/animatplot/pull/26/>`_
+
+**Authors**
+
+- `@t-makaro <https://github.com/t-makaro>`_
+- `@TomNicholas* <https://github.com/TomNicholas>`_
+- `@dcherian* <https://github.com/dcherian>`_
+
+\* indicates new author in this release.
+
 0.3.0
 -----
 
