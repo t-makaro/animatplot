@@ -83,11 +83,11 @@ def line_anim():
 class TestAddBlocks:
     def test_add_blocks(self, line_block):
         anim = amp.Animation([line_block()])
-        anim2 = anim.add(line_block())
+        result = anim.add(line_block())
 
-        assert isinstance(anim2, amp.Animation)
-        assert len(anim2.blocks) == 2
-        for actual in anim2.blocks:
+        assert isinstance(result, amp.Animation)
+        assert len(result.blocks) == 2
+        for actual in result.blocks:
             assert len(actual) == 5
             npt.assert_equal(actual.line.get_xdata(),
                              np.linspace(0, 1, 10))
@@ -108,25 +108,32 @@ class TestAddBlocks:
 class TestAddAnimations:
     def test_add_animations(self, line_anim):
         anim = line_anim()
-        anim2 = anim.add(line_anim())
+        result = anim.add(line_anim())
 
-        assert isinstance(anim2, amp.Animation)
+        assert isinstance(result, amp.Animation)
 
     def test_add_animation_with_timeline(self, line_anim):
         anim = line_anim()
-        anim2 = anim.add(line_anim(timeline=True))
+        result = anim.add(line_anim(timeline=True))
 
-        assert isinstance(anim2, amp.Animation)
-        assert len(anim2.timeline) == 5
+        assert isinstance(result, amp.Animation)
+        assert len(result.timeline) == 5
 
-    @pytest.mark.xfail(reason="This isn't testing desired behaviour"
-                              "because both timelines are the same")
     def test_add_animations_both_with_timelines(self, line_anim):
         anim = line_anim(timeline=True)
-        anim2 = anim.add(line_anim(timeline=True))
+        anim2 = line_anim()
+        t = 10*np.arange(5)
+        anim2.timeline = amp.Timeline(t)
 
-        assert isinstance(anim2, amp.Animation)
-        assert len(anim2.timeline) == 5
+        print(anim2.timeline)
+
+        result = anim.add(anim2)
+
+        print(result.timeline)
+
+        assert isinstance(result, amp.Animation)
+        assert len(result.timeline) == 5
+        npt.assert_equal(result.timeline.t, t)
 
     def test_add_animations_different_lengths(self, line_anim):
         anim = line_anim()

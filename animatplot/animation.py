@@ -27,6 +27,11 @@ class Animation:
         a matplotlib animation returned from FuncAnimation
     """
     def __init__(self, blocks, timeline=None, fig=None):
+        self.fig = plt.gcf() if fig is None else fig
+
+        self.animation = self._animate(blocks, timeline)
+
+    def _animate(self, blocks, timeline):
         if timeline is None:
             self.timeline = Timeline(range(len(blocks[0])))
         elif not isinstance(timeline, Timeline):
@@ -34,12 +39,7 @@ class Animation:
         else:
             self.timeline = timeline
 
-        self.fig = plt.gcf() if fig is None else fig
-
-        self.animation = self._animate(blocks, self.timeline)
-
-    def _animate(self, blocks, timeline):
-        _len_time = len(timeline)
+        _len_time = len(self.timeline)
         for block in blocks:
             if len(block) != _len_time:
                 raise ValueError("All blocks must animate for the same amount "
