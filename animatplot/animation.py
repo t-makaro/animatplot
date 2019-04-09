@@ -225,4 +225,3 @@ class Animation:
             self.blocks.append(block)
 
         self.animation = self._animate(self.blocks, new_timeline)
-        return self

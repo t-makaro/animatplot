@@ -83,11 +83,11 @@ def line_anim():
 class TestAddBlocks:
     def test_add_blocks(self, line_block):
         anim = amp.Animation([line_block()])
-        result = anim.add(line_block())
+        anim.add(line_block())
 
-        assert isinstance(result, amp.Animation)
-        assert len(result.blocks) == 2
-        for actual in result.blocks:
+        assert isinstance(anim, amp.Animation)
+        assert len(anim.blocks) == 2
+        for actual in anim.blocks:
             assert len(actual) == 5
             npt.assert_equal(actual.line.get_xdata(),
                              np.linspace(0, 1, 10))
@@ -108,16 +108,16 @@ class TestAddBlocks:
 class TestAddAnimations:
     def test_add_animations(self, line_anim):
         anim = line_anim()
-        result = anim.add(line_anim())
+        anim.add(line_anim())
 
-        assert isinstance(result, amp.Animation)
+        assert isinstance(anim, amp.Animation)
 
     def test_add_animation_with_timeline(self, line_anim):
         anim = line_anim()
-        result = anim.add(line_anim(timeline=True))
+        anim.add(line_anim(timeline=True))
 
-        assert isinstance(result, amp.Animation)
-        assert len(result.timeline) == 5
+        assert isinstance(anim, amp.Animation)
+        assert len(anim.timeline) == 5
 
     def test_add_animations_both_with_timelines(self, line_anim):
         anim = line_anim(timeline=True)
@@ -125,15 +125,11 @@ class TestAddAnimations:
         t = 10*np.arange(5)
         anim2.timeline = amp.Timeline(t)
 
-        print(anim2.timeline)
+        anim.add(anim2)
 
-        result = anim.add(anim2)
-
-        print(result.timeline)
-
-        assert isinstance(result, amp.Animation)
-        assert len(result.timeline) == 5
-        npt.assert_equal(result.timeline.t, t)
+        assert isinstance(anim, amp.Animation)
+        assert len(anim.timeline) == 5
+        npt.assert_equal(anim.timeline.t, t)
 
     def test_add_animations_different_lengths(self, line_anim):
         anim = line_anim()
