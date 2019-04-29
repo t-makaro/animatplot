@@ -64,7 +64,7 @@ def line_block():
 
 @pytest.fixture()
 def line_anim():
-    def make_line_anim(t_length=5, timeline=False):
+    def make_line_anim(t_length=5, timeline=False, controls=False):
         x = np.linspace(0, 1, 10)
         t = np.linspace(0, 1, t_length)
         x_grid, t_grid = np.meshgrid(x, t)
@@ -73,11 +73,32 @@ def line_anim():
         block = amp.blocks.Line(x, y_data)
 
         if timeline:
-            return amp.Animation([block], timeline=amp.Timeline(t))
+            anim = amp.Animation([block], timeline=amp.Timeline(t))
         else:
-            return amp.Animation([block])
+            anim = amp.Animation([block])
 
+        if controls:
+            anim.controls()
+
+        return anim
     return make_line_anim
+
+
+class TestSlider:
+    def test_slider_size(self, line_anim):
+        """Test text not overlapping with button (GH issue #32)"""
+        anim = line_anim(timeline=True, controls=True)
+
+        slider_rhs = anim.slider_ax.get_position().x1
+
+        valtext_bbox = anim.slider.valtext.get_window_extent()
+        valtext_extents = anim.fig.transFigure.inverted().transform(valtext_bbox)
+        valtext_rhs = valtext_extents[1][0]
+
+        button_lhs = anim.button_ax.get_position().x0
+
+        assert slider_rhs < button_lhs
+        assert valtext_rhs < button_lhs
 
 
 class TestAddBlocks:
