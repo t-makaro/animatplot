@@ -1,6 +1,8 @@
 from matplotlib.animation import FuncAnimation, PillowWriter
 from matplotlib.widgets import Button, Slider
+from matplotlib.text import Text
 import matplotlib.pyplot as plt
+
 import numpy as np
 
 from animatplot import Timeline
@@ -71,7 +73,8 @@ class Animation:
         """
         if ax is None:
             adjust_plot = {'bottom': .2}
-            rect = [.78, .03, .1, .07]
+            left, bottom, width, height = (.78, .03, .1, .07)
+            rect = (left, bottom, width, height)
 
             plt.subplots_adjust(**adjust_plot)
             self.button_ax = plt.axes(rect)
@@ -80,7 +83,7 @@ class Animation:
 
         self.button = Button(self.button_ax, "Pause")
         self.button.label2 = self.button_ax.text(
-            0.5, 0.5, 'Play',
+            x=0.5, y=0.5, s='Play',
             verticalalignment='center',
             horizontalalignment='center',
             transform=self.button_ax.transAxes
@@ -115,14 +118,6 @@ class Animation:
         color :
             The color of the slider.
         """
-        if ax is None:
-            adjust_plot = {'bottom': .2}
-            rect = [.18, .05, .5, .03]
-
-            plt.subplots_adjust(**adjust_plot)
-            self.slider_ax = plt.axes(rect)
-        else:
-            self.slider_ax = ax
 
         if valfmt is None:
             if (np.issubdtype(self.timeline.t.dtype, np.datetime64)
@@ -130,26 +125,57 @@ class Animation:
                 valfmt = '%s'
             else:
                 valfmt = '%1.2f'
-
         if self.timeline.log:
             valfmt = '$10^{%s}$' % valfmt
 
+        if ax is None:
+            # Try to intelligently decide slider width to avoid overlap
+
+            renderer = self.fig.canvas.get_renderer()
+
+            # Calculate width of widest time value on plot
+            def text_width(txt):
+                t_val_text = Text(text=txt, figure=self.fig)
+                bbox = t_val_text.get_window_extent(renderer=renderer)
+                extents = self.fig.transFigure.inverted().transform(bbox)
+                return extents[1][0] - extents[0][0]
+
+            text_val_width = max(text_width(valfmt % (self.timeline[i]))
+                                 for i in range(len(self.timeline)))
+            label_width = text_width(text)
+
+            # Calculate width of slider
+            default_button_width = 0.1
+            width = 0.73 - text_val_width - label_width - default_button_width
+
+            adjust_plot = {'bottom': .2}
+            left, bottom, height = (.18, .05, .03)
+            rect = (left, bottom, width, height)
+
+            plt.subplots_adjust(**adjust_plot)
+            self.slider_ax = plt.axes(rect)
+        else:
+            self.slider_ax = ax
+
         self.slider = Slider(
-            self.slider_ax, text, 0, self.timeline._len-1,
+            self.slider_ax, label=text, valmin=0, valmax=self.timeline._len-1,
             valinit=0,
             valfmt=(valfmt+self.timeline.units),
             valstep=1, color=color
         )
         self._has_slider = True
 
-        def set_time(t):
-            self.timeline.index = int(self.slider.val)
+        def set_time(new_slider_val):
+            # Update slider value and text on each step
+            self.timeline.index = int(new_slider_val)
             self.slider.valtext.set_text(
                 self.slider.valfmt % (self.timeline[self.timeline.index]))
+
             if self._pause:
                 for block in self.blocks:
                     block._update(self.timeline.index)
                 self.fig.canvas.draw()
+
         self.slider.on_changed(set_time)
 
     def controls(self, timeline_slider_args={}, toggle_args={}):
@@ -170,8 +196,8 @@ class Animation:
     def save_gif(self, filename):
         """Saves the animation to a gif
 
-        A convience function. Provided to let the user avoid dealing
-        with writers.
+        A convenience function. Provided to let the user avoid dealing
+        with writers - uses PillowWriter.
 
         Parameters
         ----------
