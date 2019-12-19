@@ -69,9 +69,10 @@ class Animation:
 
             controls_height = 0.2
 
-            # get gridspec to adjust
-            gs = (plt.gca().get_gridspec().get_topmost_subplotspec()
-                    .get_gridspec())
+            fig_gridspecs = self.fig._gridspecs
+            if len(fig_gridspecs) > 1:
+                raise ValueError('multiple gridspecs found in figure')
+            gs = fig_gridspecs[0]
             nrows, ncols = gs.get_geometry()
             height_ratios = gs.get_height_ratios()
 
@@ -112,6 +113,9 @@ class Animation:
             except:
                 # editing the gridspec did not work for some reason, fall back to
                 # subplots_adjust
+                print('warning: adding play/pause button to gridspec failed, '
+                      'adding in independent axes. tight_layout() will ignore '
+                      'the button.')
                 adjust_plot = {'bottom': .2}
                 rect = [.78, .03, .1, .07]
 
@@ -167,6 +171,9 @@ class Animation:
             except:
                 # editing the gridspec did not work for some reason, fall back to
                 # subplots_adjust
+                print('warning: adding timeline slider to gridspec failed, '
+                      'adding in independent axes. tight_layout() will ignore '
+                      'the slider.')
                 adjust_plot = {'bottom': .2}
                 rect = [.18, .05, .5, .03]
                 plt.subplots_adjust(**adjust_plot)
