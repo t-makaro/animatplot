@@ -49,14 +49,31 @@ class Pcolormesh(Block):
         self.C = np.asanyarray(self.C)
 
         Slice = self._make_slice(0, 3)
+
+        # replicate matplotlib logic for setting default shading value because
+        # matplotlib resets the _shading member variable of the QuadMesh to "flat" after
+        # interpolating X and Y to corner positions
+        self. shading = kwargs.get("shading", plt.rcParams.get("pcolor.shading", "flat"))
+        if self.shading == "auto":
+            Nx = self.X.shape[-1]
+            Ny = self.Y.shape[0]
+            if (Ny, Nx) == self.C.shape[Slice]:
+                self.shading = "nearest"
+            else:
+                self.shading = "flat"
+
         if self._arg_len == 1:
             self.quad = self.ax.pcolormesh(self.C[Slice], **kwargs)
         elif self._arg_len == 3:
             self.quad = self.ax.pcolormesh(self.X, self.Y, self.C[Slice], **kwargs)
 
     def _update(self, i):
-        Slice = self._make_pcolormesh_slice(i, 3)
-        self.quad.set_array(self.C[Slice].ravel())
+        if self.shading == "flat":
+            Slice = self._make_pcolormesh_flat_slice(i, 3)
+            self.quad.set_array(self.C[Slice].ravel())
+        else:
+            Slice = self._make_slice(i, 3)
+            self.quad.set_array(self.C[Slice])
         return self.quad
 
     def __len__(self):
@@ -64,7 +81,7 @@ class Pcolormesh(Block):
             return self.C.shape[0]
         return self.C.shape[self.t_axis]
 
-    def _make_pcolormesh_slice(self, i, dim):
+    def _make_pcolormesh_flat_slice(self, i, dim):
         if self._is_list:
             return i
         Slice = [slice(-1)]*3  # weird thing to make animation work
