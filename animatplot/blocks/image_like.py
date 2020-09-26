@@ -57,7 +57,7 @@ class Pcolormesh(Block):
         if self.shading == "auto":
             Nx = self.X.shape[-1]
             Ny = self.Y.shape[0]
-            if (Ny, Nx) == self.C.shape[Slice]:
+            if (Ny, Nx) == self.C[Slice].shape:
                 self.shading = "nearest"
             else:
                 self.shading = "flat"
