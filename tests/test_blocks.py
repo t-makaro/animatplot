@@ -220,6 +220,19 @@ class TestComparisons:
         block = amp.blocks.Pcolormesh(X[:, :, 0], Y[:, :, 0], Z, t_axis=2)
         return amp.Animation([block])
 
+    @animation_compare(baseline_images='Blocks/Pcolormesh_corner', nframes=3)
+    def test_Pcolormesh_corner_positions(self):
+        # Test with size of Z being (nx-1)*(ny-1) like matplotlib expects for 'flat'
+        # shading
+        x = np.linspace(-2*np.pi, 2*np.pi, 10)
+        t = np.linspace(0, 2*np.pi, 3)
+
+        X, Y, T = np.meshgrid(x, x, t)
+        Z = np.sin(X**2+Y**2-T)[:-1, :-1, :]
+
+        block = amp.blocks.Pcolormesh(X[:, :, 0], Y[:, :, 0], Z, t_axis=2)
+        return amp.Animation([block])
+
     @pytest.mark.skipif(
         packaging.version.parse(mpl.__version__) < packaging.version.parse("3.3.0"),
         reason="matplotlib version too low - does not have shading='nearest'"
