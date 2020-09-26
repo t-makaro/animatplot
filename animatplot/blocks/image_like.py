@@ -54,13 +54,16 @@ class Pcolormesh(Block):
         # matplotlib resets the _shading member variable of the QuadMesh to "flat" after
         # interpolating X and Y to corner positions
         self. shading = kwargs.get("shading", plt.rcParams.get("pcolor.shading", "flat"))
+        Nx = self.X.shape[-1]
+        Ny = self.Y.shape[0]
         if self.shading == "auto":
-            Nx = self.X.shape[-1]
-            Ny = self.Y.shape[0]
             if (Ny, Nx) == self.C[Slice].shape:
                 self.shading = "nearest"
             else:
                 self.shading = "flat"
+        if self.shading == "flat" and ((Ny - 1, Nx - 1) == self.C[Slice].shape):
+            # Need to slice without the workaround in _update()
+            self.shading = "flat_corner_grid"
 
         if self._arg_len == 1:
             self.quad = self.ax.pcolormesh(self.C[Slice], **kwargs)
