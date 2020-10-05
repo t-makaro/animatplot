@@ -1,7 +1,10 @@
+[![Documentation Status](https://readthedocs.org/projects/animatplot/badge/?version=latest)](https://animatplot.readthedocs.io/en/latest/?badge=latest)
+
 # animatplot
-A python package for making interactive animated plots build on matplotlib.
+A python package for making interactive as well as animated plots with matplotlib.
 
 ![image](docs/source/tutorial/images/multiblock.gif)
+![image](docs/source/_static/animatplot-mouse.gif)
 
 ## Requires
 - Python >= 3.5
