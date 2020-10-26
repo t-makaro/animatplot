@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from animatplot import Timeline
+from animatplot.blocks.base import Block
 
 
 class Animation:
@@ -26,6 +27,11 @@ class Animation:
         a matplotlib animation returned from FuncAnimation
     """
     def __init__(self, blocks, timeline=None, fig=None):
+        self.fig = plt.gcf() if fig is None else fig
+
+        self.animation = self._animate(blocks, timeline)
+
+    def _animate(self, blocks, timeline):
         if timeline is None:
             self.timeline = Timeline(range(len(blocks[0])))
         elif not isinstance(timeline, Timeline):
@@ -36,14 +42,14 @@ class Animation:
         _len_time = len(self.timeline)
         for block in blocks:
             if len(block) != _len_time:
-                raise ValueError("All blocks must animate for the same amount of time")
+                raise ValueError("All blocks must animate for the same amount "
+                                 "of time")
 
         self.blocks = blocks
-        self.fig = plt.gcf() if fig is None else fig
         self._has_slider = False
         self._pause = False
 
-        def animate(i):
+        def update_all(i):
             updates = []
             for block in self.blocks:
                 updates.append(block._update(self.timeline.index))
@@ -52,11 +58,8 @@ class Animation:
             self.timeline._update()
             return updates
 
-        self.animation = FuncAnimation(
-            self.fig, animate,
-            frames=self.timeline._len,
-            interval=1000/self.timeline.fps
-        )
+        return FuncAnimation(self.fig, update_all, frames=self.timeline._len,
+                             interval=1000 / self.timeline.fps)
 
     def toggle(self, ax=None):
         """Creates a play/pause button to start/stop the animation
@@ -176,7 +179,8 @@ class Animation:
             the name of the file to be created without the file extension
         """
         self.timeline.index -= 1  # required for proper starting point for save
-        self.animation.save(filename+'.gif', writer=PillowWriter(fps=self.timeline.fps))
+        self.animation.save(filename+'.gif',
+                            writer=PillowWriter(fps=self.timeline.fps))
 
     def save(self, *args, **kwargs):
         """Saves an animation
@@ -185,3 +189,39 @@ class Animation:
         """
         self.timeline.index -= 1  # required for proper starting point for save
         self.animation.save(*args, **kwargs)
+
+    def add(self, new):
+        """
+        Updates the animation object by adding additional blocks.
+
+        The new blocks can be passed as a list, or as part of a second animaion.
+        If passed as part of a new animation, the timeline of this new
+        animation object will replace the old one.
+
+        Parameters
+        ----------
+        new : amp.animation.Animation, or list of amp.block.Block objects
+            Either blocks to add to animation instance, or another animation
+            instance whose blocks should be combined with this animation.
+        """
+
+        if isinstance(new, Animation):
+            new_blocks = new.blocks
+            new_timeline = new.timeline
+
+        else:
+            if not isinstance(new, list):
+                new_blocks = [new]
+            else:
+                new_blocks = new
+            new_timeline = self.timeline
+
+        for i, block in enumerate(new_blocks):
+            if not isinstance(block, Block):
+                raise TypeError(f"Block number {i} passed is of type "
+                                f"{type(block)}, not of type "
+                                f"animatplot.blocks.Block (or a subclass)")
+
+            self.blocks.append(block)
+
+        self.animation = self._animate(self.blocks, new_timeline)
