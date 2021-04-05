@@ -61,9 +61,7 @@ class Surface(Block):
         self.C = np.asanyarray(self.C)
 
         if fixed_vscale:
-            self.kwargs["vmin"] = self.kwargs.get("vmin", self.C.min())
-            self.kwargs["vmax"] = self.kwargs.get("vmax", self.C.max())
-            print("setting vscale", self.C.min(), self.C.max(), self.kwargs)
+            self.ax.set_zlim([self.C.min(), self.C.max()])
 
         Slice = self._make_slice(0, 3)
 
