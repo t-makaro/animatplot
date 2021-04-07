@@ -49,6 +49,7 @@ These blocks are built to animate data.
     Pcolormesh
     Imshow
     Scatter
+    Surface
 
 Graph Label Blocks
 ~~~~~~~~~~~~~~~~~~
