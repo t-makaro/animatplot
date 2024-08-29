@@ -73,7 +73,6 @@ jobs:
 
       - store_artifacts:
           path: tests/output_images
-
       - codecov/upload
 
 workflows:
