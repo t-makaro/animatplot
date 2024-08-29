@@ -1,8 +1,15 @@
-# Python CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-python/ for more details
-#
-version: 2
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/configuration-reference
+
+# For a detailed guide to building and testing with Python, read the docs:
+# https://circleci.com/docs/language-python/ for more details
+version: 2.1
+
+# Orbs are reusable packages of CircleCI configuration that you may share across projects, enabling you to create encapsulated, parameterized commands, jobs, and executors that can be used across multiple projects.
+# See: https://circleci.com/docs/orb-intro/
+orbs:
+  # See the Python orb documentation here: https://circleci.com/developer/orbs/orb/circleci/python
+  python: circleci/python@2.1.1
 
 bin-path: &bin-path
   name: Add local binaries to path
@@ -29,7 +36,7 @@ doc-run: &doc-build
 test-deps-run: &test-deps
   name: Install testing dependencies
   command: |
-    python -m pip install --user matplotlib>=2.2 pytest pytest-cov pillow
+    python -m pip install --user matplotlib>=3.5 pytest pytest-cov pillow
     sudo pip install codecov
 
 tests-run: &test-run
@@ -38,13 +45,13 @@ tests-run: &test-run
 
 
 jobs:
-  docs-python36:
+  docs-python311:
     docker:
-      - image: circleci/python:3.6
+      - image: cimg/python:3.11
     steps:
       - checkout
 
-      - run: *bin-path
+      #- run: *bin-path
       - run: *apt-install
       - run: *doc-deps
       - run: *doc-build
@@ -52,13 +59,13 @@ jobs:
       - store_artifacts:
           path: docs/build/html
 
-  test-python36:
+  test-python311:
     docker:
-      - image: circleci/python:3.6
+      - image: cimg/python:3.11
     steps:
       - checkout
 
-      - run: *bin-path
+      #- run: *bin-path
       - run: *test-deps
       - run: *test-run
 
@@ -74,5 +81,5 @@ workflows:
   version: 2
   build:
     jobs:
-      - docs-python36
-      - test-python36
+      - docs-python311
+      - test-python311
