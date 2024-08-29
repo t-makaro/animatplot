@@ -11,7 +11,7 @@ Interactivity is available in Jupyter Notebook with following cell magic.
 
 .. code-block:: python
 
-    %matplotlib notebook
+    %matplotlib ipympl
 
 
 .. toctree::

@@ -53,7 +53,7 @@ class Pcolormesh(Block):
         # replicate matplotlib logic for setting default shading value because
         # matplotlib resets the _shading member variable of the QuadMesh to "flat" after
         # interpolating X and Y to corner positions
-        self. shading = kwargs.get("shading", plt.rcParams.get("pcolor.shading", "flat"))
+        self.shading = kwargs.get("shading", plt.rcParams.get("pcolor.shading", "flat"))
         Nx = self.X.shape[-1]
         Ny = self.Y.shape[0]
         if self.shading == "auto":
