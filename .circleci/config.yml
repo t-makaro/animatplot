@@ -19,7 +19,8 @@ bin-path: &bin-path
 apt-run: &apt-install
   name: Install apt packages
   command: |
-    sudo apt-get install -y pandoc
+    sudo apt update
+    sudo apt install -y pandoc
 
 deps-run: &doc-deps
   name: Install Python dependencies
@@ -37,7 +38,7 @@ test-deps-run: &test-deps
   name: Install testing dependencies
   command: |
     python -m pip install --user matplotlib>=3.5 pytest pytest-cov pillow
-    sudo pip install codecov
+    pip install codecov
 
 tests-run: &test-run
   name: Run Pytest
