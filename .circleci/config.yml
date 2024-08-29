@@ -51,7 +51,7 @@ jobs:
     steps:
       - checkout
 
-      #- run: *bin-path
+      - run: *bin-path
       - run: *apt-install
       - run: *doc-deps
       - run: *doc-build
@@ -65,7 +65,7 @@ jobs:
     steps:
       - checkout
 
-      #- run: *bin-path
+      - run: *bin-path
       - run: *test-deps
       - run: *test-run
 
