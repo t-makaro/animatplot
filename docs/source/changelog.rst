@@ -6,7 +6,7 @@ Changes to animatplot
 0.4.3
 -----
 
-- Fixed tests and ensured support for newer versions of python and numpy (<2.0>). `#62 <https://github.com/t-makaro/animatplot/pull/62>`_
+- Fixed tests and ensured support for newer versions of python and numpy (<2.0). `#62 <https://github.com/t-makaro/animatplot/pull/62>`_
 
 0.4.2
 -----

@@ -98,10 +98,10 @@ intersphinx_mapping = {'matplotlib': ('https://matplotlib.org/', None)}
 # a list of builtin themes.
 #
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
-if not on_rtd:
-    import sphinx_rtd_theme
-    html_theme = 'sphinx_rtd_theme'
-    theme_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+
+import sphinx_rtd_theme
+html_theme = 'sphinx_rtd_theme'
+theme_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
