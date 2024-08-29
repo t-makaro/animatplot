@@ -1,6 +1,7 @@
 import os
 from os.path import join, split
 import functools
+from pathlib import Path
 import pytest
 
 import matplotlib.pyplot as plt
@@ -25,9 +26,22 @@ class BunchOFiles(FileMovieWriter):
         super().__init__(*args, extra_args=(), **kwargs)
 
     def setup(self, fig, dpi, frame_prefix):
-        super().setup(fig, dpi, frame_prefix, clear_temp=False)
+        super().setup(fig, dpi, frame_prefix)
         self.fname_format_str = '%s%%d.%s'
         self.temp_prefix, self.frame_format = self.outfile.split('.')
+
+    def _frame_sink(self):
+        # Creates a filename for saving using the basename and the current
+        # counter.
+        path = Path(self._base_temp_name() % self._frame_counter)
+
+        # Save the filename so we can delete it later if necessary
+        self._temp_paths.append(path)
+        self._frame_counter += 1  # Ensures each created name is 'unique'
+
+        # This file returned here will be closed once it's used by savefig()
+        # because it will no longer be referenced and will be gc-ed.
+        return open(path, 'wb')
 
     def grab_frame(self, **savefig_kwargs):
         '''

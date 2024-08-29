@@ -56,7 +56,12 @@ class Line(Block):
 
         if y is None:
             raise ValueError("Must supply y data to plot")
-        y = np.asanyarray(y)
+        
+        try:
+            y = np.asanyarray(y)
+        except ValueError as err:
+            y = np.asanyarray(y, dtype=object)
+
         if str(y.dtype) == 'object':
             self.t_axis = 0
 
@@ -65,7 +70,7 @@ class Line(Block):
                 raise ValueError("Must specify x data explicitly when passing"
                                  "a ragged array for y data")
 
-            x = np.asanyarray(x)
+            x = np.asanyarray(x, dtype=object)
 
             if not all(len(xline) == len(yline) for xline, yline in zip(x, y)):
                 raise ValueError("Length of x & y data must match one another "

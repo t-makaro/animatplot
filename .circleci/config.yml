@@ -1,8 +1,16 @@
-# Python CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-python/ for more details
-#
-version: 2
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/configuration-reference
+
+# For a detailed guide to building and testing with Python, read the docs:
+# https://circleci.com/docs/language-python/ for more details
+version: 2.1
+
+# Orbs are reusable packages of CircleCI configuration that you may share across projects, enabling you to create encapsulated, parameterized commands, jobs, and executors that can be used across multiple projects.
+# See: https://circleci.com/docs/orb-intro/
+orbs:
+  # See the Python orb documentation here: https://circleci.com/developer/orbs/orb/circleci/python
+  python: circleci/python@2.1.1
+  codecov: codecov/codecov@4.0.1
 
 bin-path: &bin-path
   name: Add local binaries to path
@@ -12,7 +20,8 @@ bin-path: &bin-path
 apt-run: &apt-install
   name: Install apt packages
   command: |
-    sudo apt-get install -y pandoc
+    sudo apt update
+    sudo apt install -y pandoc
 
 deps-run: &doc-deps
   name: Install Python dependencies
@@ -29,8 +38,8 @@ doc-run: &doc-build
 test-deps-run: &test-deps
   name: Install testing dependencies
   command: |
-    python -m pip install --user matplotlib>=2.2 pytest pytest-cov pillow
-    sudo pip install codecov
+    python -m pip install --user matplotlib>=3.5 pytest pytest-cov pillow
+    pip install codecov
 
 tests-run: &test-run
   name: Run Pytest
@@ -38,9 +47,9 @@ tests-run: &test-run
 
 
 jobs:
-  docs-python36:
+  docs-python311:
     docker:
-      - image: circleci/python:3.6
+      - image: cimg/python:3.11
     steps:
       - checkout
 
@@ -52,9 +61,9 @@ jobs:
       - store_artifacts:
           path: docs/build/html
 
-  test-python36:
+  test-python311:
     docker:
-      - image: circleci/python:3.6
+      - image: cimg/python:3.11
     steps:
       - checkout
 
@@ -62,17 +71,16 @@ jobs:
       - run: *test-deps
       - run: *test-run
 
+      - codecov/upload:
+          file: coverage.xml
+
+
       - store_artifacts:
           path: tests/output_images
-
-      - run:
-          name: Upload coverage report
-          command: codecov
-
 
 workflows:
   version: 2
   build:
     jobs:
-      - docs-python36
-      - test-python36
+      - docs-python311
+      - test-python311
