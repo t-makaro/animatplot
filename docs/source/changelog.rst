@@ -3,6 +3,32 @@
 Changes to animatplot
 =====================
 
+0.4.3
+-----
+
+- Fixed tests and ensured support for newer versions of python and numpy (<2.0>). `#62 <https://github.com/t-makaro/animatplot/pull/62>`_
+
+0.4.2
+-----
+
+- Added a new gif to readme to emphasize that the sliders can be used interavtively. `#54 <https://github.com/t-makaro/animatplot/pull/54>`_
+- Improved compatibility with pcolormesh shading options. `#53 <https://github.com/t-makaro/animatplot/pull/53>`_
+
+**Authors**
+
+- `@t-makaro <https://github.com/t-makaro>`_
+- `@ianhi* <https://github.com/ianhi>`_
+- `@johnomotani* <https://github.com/johnomotani>`_
+
+\* indicates new author in this release.
+
+0.4.1
+-----
+
+**Bug Fixes**
+
+- Ensure the Pcolormesh block uses the t_axis for length.
+
 0.4.0
 -----
 
