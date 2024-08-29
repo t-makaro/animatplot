@@ -71,12 +71,12 @@ jobs:
       - run: *test-deps
       - run: *test-run
 
-      - store_artifacts:
-          path: tests/output_images
-
       - run:
           name: Upload coverage report
           command: codecov
+
+      - store_artifacts:
+          path: tests/output_images
 
 workflows:
   version: 2
