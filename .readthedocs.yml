@@ -1,5 +1,6 @@
-build:
-  image: latest
+version: 2
 
-python:
-  version: 3.6
+build:
+  os: ubuntu-24.04
+  tools:
+    python: "3.12"
