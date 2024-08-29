@@ -76,7 +76,7 @@ jobs:
 
       - run:
           name: Upload coverage report
-      - codecov/upload
+          command: codecov
 
 workflows:
   version: 2
