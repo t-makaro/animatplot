@@ -309,6 +309,18 @@ class TestComparisons:
         block = amp.blocks.Quiver(X, Y, U, V)
         return amp.Animation([block])
 
+    @animation_compare(baseline_images='Blocks/Surface', nframes=3)
+    def test_Surface(self):
+        x = np.linspace(-2*np.pi, 2*np.pi, 100)
+        t = np.linspace(0, 2*np.pi, 3)
+
+        X, Y, T = np.meshgrid(x, x, t)
+        Z = np.sin(X**2+Y**2-T)
+
+        fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
+        block = amp.blocks.Surface(X[:, :, 0], Y[:, :, 0], Z, t_axis=2)
+        return amp.Animation([block])
+
     @animation_compare(baseline_images='Blocks/Nuke', nframes=3)
     def test_Nuke(self):
         ax = plt.gca()
