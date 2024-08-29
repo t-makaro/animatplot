@@ -71,9 +71,12 @@ jobs:
       - run: *test-deps
       - run: *test-run
 
+      - codecov/upload:
+          file: coverage.xml
+
+
       - store_artifacts:
           path: tests/output_images
-      - codecov/upload
 
 workflows:
   version: 2
