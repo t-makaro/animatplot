@@ -10,6 +10,7 @@ version: 2.1
 orbs:
   # See the Python orb documentation here: https://circleci.com/developer/orbs/orb/circleci/python
   python: circleci/python@2.1.1
+  codecov: codecov/codecov@4.0.1
 
 bin-path: &bin-path
   name: Add local binaries to path
@@ -75,8 +76,7 @@ jobs:
 
       - run:
           name: Upload coverage report
-          command: codecov
-
+      - codecov/upload
 
 workflows:
   version: 2
