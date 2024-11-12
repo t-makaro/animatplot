@@ -1,12 +1,19 @@
-from matplotlib.testing import setup
-setup()
 import os
+
 import pytest
-import numpy as np
+
+import matplotlib.testing
 import matplotlib.pyplot as plt
 from matplotlib.animation import PillowWriter
+
+import numpy as np
+import numpy.testing as npt
+
 import animatplot as amp
 from tests.tools import animation_compare
+
+
+matplotlib.testing.setup()
 
 
 @pytest.mark.xfail
@@ -41,3 +48,90 @@ def test_save():
     anim.save_gif(base+'save')
     plt.close('all')
     assert os.path.exists(base+'save.gif')
+
+
+@pytest.fixture()
+def line_block():
+    def make_line_block(t_length=5):
+        x = np.linspace(0, 1, 10)
+        t = np.linspace(0, 1, t_length)
+        x_grid, t_grid = np.meshgrid(x, t)
+        y_data = np.sin(2 * np.pi * (x_grid + t_grid))
+
+        return amp.blocks.Line(x, y_data)
+    return make_line_block
+
+
+@pytest.fixture()
+def line_anim():
+    def make_line_anim(t_length=5, timeline=False):
+        x = np.linspace(0, 1, 10)
+        t = np.linspace(0, 1, t_length)
+        x_grid, t_grid = np.meshgrid(x, t)
+        y_data = np.sin(2 * np.pi * (x_grid + t_grid))
+
+        block = amp.blocks.Line(x, y_data)
+
+        if timeline:
+            return amp.Animation([block], timeline=amp.Timeline(t))
+        else:
+            return amp.Animation([block])
+
+    return make_line_anim
+
+
+class TestAddBlocks:
+    def test_add_blocks(self, line_block):
+        anim = amp.Animation([line_block()])
+        anim.add(line_block())
+
+        assert isinstance(anim, amp.Animation)
+        assert len(anim.blocks) == 2
+        for actual in anim.blocks:
+            assert len(actual) == 5
+            npt.assert_equal(actual.line.get_xdata(),
+                             np.linspace(0, 1, 10))
+
+    def test_wrong_length_block(self, line_block):
+        anim = amp.Animation([line_block()])
+
+        with pytest.raises(ValueError):
+            anim.add(line_block(t_length=6))
+
+    def test_wrong_type(self, line_block):
+        anim = amp.Animation([line_block()])
+
+        with pytest.raises(TypeError):
+            anim.add('not a block')
+
+
+class TestAddAnimations:
+    def test_add_animations(self, line_anim):
+        anim = line_anim()
+        anim.add(line_anim())
+
+        assert isinstance(anim, amp.Animation)
+
+    def test_add_animation_with_timeline(self, line_anim):
+        anim = line_anim()
+        anim.add(line_anim(timeline=True))
+
+        assert isinstance(anim, amp.Animation)
+        assert len(anim.timeline) == 5
+
+    def test_add_animations_both_with_timelines(self, line_anim):
+        anim = line_anim(timeline=True)
+        anim2 = line_anim()
+        t = 10*np.arange(5)
+        anim2.timeline = amp.Timeline(t)
+
+        anim.add(anim2)
+
+        assert isinstance(anim, amp.Animation)
+        assert len(anim.timeline) == 5
+        npt.assert_equal(anim.timeline.t, t)
+
+    def test_add_animations_different_lengths(self, line_anim):
+        anim = line_anim()
+        with pytest.raises(ValueError):
+            anim.add(line_anim(t_length=6))
